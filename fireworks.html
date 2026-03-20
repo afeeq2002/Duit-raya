@@ -34,22 +34,34 @@ canvas.height = window.innerHeight;
 let particles = [];
 let textParticles = [];
 
-// FIREWORKS NORMAL
+// 🎆 FIREWORKS
 function createFirework() {
   let x = Math.random() * canvas.width;
   let y = Math.random() * canvas.height / 2;
+
+  let colors = [
+    "#ff4d4d",
+    "#ffd700",
+    "#00ffff",
+    "#ff66ff",
+    "#66ff66",
+    "#ffffff"
+  ];
+
+  let color = colors[Math.floor(Math.random() * colors.length)];
 
   for (let i = 0; i < 60; i++) {
     particles.push({
       x, y,
       dx: (Math.random() - 0.5) * 6,
       dy: (Math.random() - 0.5) * 6,
-      life: 100
+      life: 100,
+      color: color
     });
   }
 }
 
-// DRAW TEXT TO PIXEL
+// ✨ CREATE TEXT PARTICLES (Nadd)
 function createTextParticles() {
   let off = document.createElement("canvas");
   let offCtx = off.getContext("2d");
@@ -60,13 +72,14 @@ function createTextParticles() {
   offCtx.fillStyle = "white";
   offCtx.font = "90px Cormorant";
   offCtx.textAlign = "center";
+  offCtx.textBaseline = "middle";
 
   offCtx.fillText("Nadd", canvas.width/2, canvas.height/2);
 
   let data = offCtx.getImageData(0,0,canvas.width,canvas.height).data;
 
-  for (let y = 0; y < canvas.height; y += 6) {
-    for (let x = 0; x < canvas.width; x += 6) {
+  for (let y = 0; y < canvas.height; y += 4) {
+    for (let x = 0; x < canvas.width; x += 4) {
       let index = (y * canvas.width + x) * 4;
 
       if (data[index+3] > 128) {
@@ -74,14 +87,15 @@ function createTextParticles() {
           x: Math.random()*canvas.width,
           y: Math.random()*canvas.height,
           tx: x,
-          ty: y
+          ty: y,
+          color: `hsl(${Math.random()*360}, 100%, 60%)`
         });
       }
     }
   }
 }
 
-// ANIMATION
+// 🎬 ANIMATION
 let mode = "fireworks";
 
 function animate() {
@@ -90,7 +104,7 @@ function animate() {
 
   if (mode === "fireworks") {
     particles.forEach((p, i) => {
-      ctx.fillStyle = "white";
+      ctx.fillStyle = p.color;
       ctx.fillRect(p.x, p.y, 2, 2);
 
       p.x += p.dx;
@@ -103,29 +117,29 @@ function animate() {
 
   if (mode === "text") {
     textParticles.forEach(p => {
-      ctx.fillStyle = "white";
+      ctx.fillStyle = p.color;
       ctx.fillRect(p.x, p.y, 2, 2);
 
-      // move toward target
-      p.x += (p.tx - p.x) * 0.05;
-      p.y += (p.ty - p.y) * 0.05;
+      // slow movement
+      p.x += (p.tx - p.x) * 0.02;
+      p.y += (p.ty - p.y) * 0.02;
     });
   }
 
   requestAnimationFrame(animate);
 }
 
-setInterval(createFirework, 500);
+setInterval(createFirework, 700);
 animate();
 
-// SWITCH TO TEXT
+// 🔄 TRANSFORM TO NAME
 setTimeout(() => {
   mode = "text";
   particles = [];
   createTextParticles();
-}, 5000);
+}, 7000);
 
-// CLICK TO NEXT PAGE
+// 👉 CLICK → PAGE 3
 document.addEventListener("click", () => {
   if (mode === "text") {
     window.location.href = "ucapan.html";
