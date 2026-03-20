@@ -1,105 +1,122 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Untuk Awak</title>
+  <title>Untuk Awak</title>
 
-<style>
-body {
-  margin:0;
-  font-family:'Segoe UI', sans-serif;
-  color:white;
-  text-align:center;
-  background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
-              url('background.jpg') center/cover no-repeat;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-}
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
 
-/* Container fade */
-.container {
-  transition: opacity 1s ease;
-}
+  <style>
+    body {
+      margin:0;
+      font-family: 'Segoe UI', sans-serif;
+      color:white;
+      text-align:center;
 
-.fade-out {
-  opacity: 0;
-}
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+                  url('background.jpg') center/cover no-repeat;
 
-/* Button style */
-.name-btn {
-  padding: 14px 28px;
-  font-size: 20px;
-  border: none;
-  border-radius: 30px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+      overflow:hidden;
+    }
 
-  background: rgba(255, 255, 255, 0.15); /* transparent */
-  backdrop-filter: blur(10px); /* glass effect */
-  -webkit-backdrop-filter: blur(10px);
+    .container {
+      transition: opacity 1s ease;
+    }
 
-  color: #ffffff;
-  border: 1px solid rgba(255,255,255,0.3);
+    .fade-out {
+      opacity: 0;
+    }
 
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-}
-</style>
+    /* Button style (glass effect) */
+    .name-btn {
+      font-family: 'Playfair Display', serif;
+      letter-spacing: 1px;
+      font-size: 22px;
 
+      padding: 14px 28px;
+      border-radius: 30px;
+
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+
+      color: white;
+      border: 1px solid rgba(255,255,255,0.3);
+
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-width: 260px;
+    }
+
+    .name-btn:hover {
+      background: rgba(255,255,255,0.25);
+      transform: scale(1.05);
+    }
+
+    /* Cursor blinking */
+    .name-btn::after {
+      content: "|";
+      margin-left: 5px;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="container" id="main">
+  <div class="container" id="main">
 
-  <p style="opacity:0.7;">a small thing for you 🌙</p>
+    <p style="opacity:0.7;">a small thing for you 🌙</p>
 
-  <!-- BUTTON NAMA -->
-  <button onclick="startTransition()" class="name-btn">
-    Nur Fatin Nadhirah 
-  </button>
+    <!-- BUTTON -->
+    <button onclick="startTransition()" class="name-btn" id="nameText"></button>
 
-  <p style="opacity:0.5;">(tap untuk buka)</p>
+    <p style="opacity:0.5;">(tap untuk buka)</p>
 
-</div>
+  </div>
 
-<script>
-function startTransition() {
-  const main = document.getElementById("main");
+  <!-- SOUND -->
+  <audio id="clickSound" src="sound.mp3" preload="auto"></audio>
 
-  // fade out animation
-  main.classList.add("fade-out");
+  <script>
+    function startTransition() {
+      const main = document.getElementById("main");
+      let sound = document.getElementById("clickSound");
 
-  // lepas 1 saat pergi next page
-  setTimeout(() => {
-    window.location.href = "ucapan.html";
-  }, 1000);
-}
-<script>
-function startTransition() {
-  const main = document.getElementById("main");
+      sound.volume = 0.4;
+      sound.play();
 
-  main.classList.add("fade-out");
+      setTimeout(() => {
+        main.classList.add("fade-out");
+      }, 150);
 
-  setTimeout(() => {
-    window.location.href = "ucapan.html";
-  }, 1000);
-}
+      setTimeout(() => {
+        window.location.href = "ucapan.html";
+      }, 1100);
+    }
 
-// 👉 TAMBAH KAT SINI (bawah function)
-const text = "Nur Fatin Nadhirah";
-let i = 0;
+    // Typing effect
+    const text = "Nur Fatin Nadhirah";
+    let i = 0;
 
-function typeEffect() {
-  if (i < text.length) {
-    document.getElementById("nameText").innerHTML += text.charAt(i);
-    i++;
-    setTimeout(typeEffect, 80);
-  }
-}
+    function typeEffect() {
+      if (i < text.length) {
+        document.getElementById("nameText").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typeEffect, 80);
+      }
+    }
 
-window.onload = typeEffect;
-</script>
+    window.onload = typeEffect;
+  </script>
 
 </body>
 </html>
