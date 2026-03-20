@@ -75,6 +75,30 @@ function startTransition() {
     window.location.href = "ucapan.html";
   }, 1000);
 }
+<script>
+function startTransition() {
+  const main = document.getElementById("main");
+
+  main.classList.add("fade-out");
+
+  setTimeout(() => {
+    window.location.href = "ucapan.html";
+  }, 1000);
+}
+
+// 👉 TAMBAH KAT SINI (bawah function)
+const text = "Nur Fatin Nadhirah";
+let i = 0;
+
+function typeEffect() {
+  if (i < text.length) {
+    document.getElementById("nameText").innerHTML += text.charAt(i);
+    i++;
+    setTimeout(typeEffect, 80);
+  }
+}
+
+window.onload = typeEffect;
 </script>
 
 </body>
