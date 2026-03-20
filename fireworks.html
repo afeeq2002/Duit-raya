@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>✨</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@600&display=swap" rel="stylesheet">
 
 <style>
 body {
@@ -17,20 +17,6 @@ body {
 canvas {
   display:block;
 }
-
-/* nama tengah */
-#finalText {
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%, -50%) scale(0.8);
-  font-size:42px;
-  color:white;
-  opacity:0;
-  cursor:pointer;
-  transition: all 1.5s ease;
-  text-shadow: 0 0 20px white, 0 0 40px gold;
-}
 </style>
 </head>
 
@@ -38,23 +24,7 @@ canvas {
 
 <canvas id="canvas"></canvas>
 
-<!-- SOUND -->
-<audio id="boomSound" src="boom.mp3" preload="auto"></audio>
-
-<!-- FINAL NAME -->
-<div id="finalText">Nur Fatin Nadhirah</div>
-
 <script>
-
-// unlock sound (iPhone/iPad)
-document.body.addEventListener("click", () => {
-  let s = document.getElementById("boomSound");
-  s.play().then(()=>{
-    s.pause();
-    s.currentTime = 0;
-  }).catch(()=>{});
-}, { once: true });
-
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
@@ -62,74 +32,105 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let particles = [];
+let textParticles = [];
 
+// FIREWORKS NORMAL
 function createFirework() {
-
-  // SOUND
-  let s = document.getElementById("boomSound");
-  s.currentTime = 0;
-  s.volume = 0.2;
-  s.play().catch(()=>{});
-
   let x = Math.random() * canvas.width;
   let y = Math.random() * canvas.height / 2;
 
-  let colors = [
-    "#ff4d4d",
-    "#ffd700",
-    "#00ffff",
-    "#ff66ff",
-    "#66ff66",
-    "#ffffff"
-  ];
-
-  let color = colors[Math.floor(Math.random() * colors.length)];
-
-  for (let i = 0; i < 80; i++) {
+  for (let i = 0; i < 60; i++) {
     particles.push({
-      x: x,
-      y: y,
-      dx: (Math.random() - 0.5) * 8,
-      dy: (Math.random() - 0.5) * 8,
-      life: 100,
-      color: color
+      x, y,
+      dx: (Math.random() - 0.5) * 6,
+      dy: (Math.random() - 0.5) * 6,
+      life: 100
     });
   }
 }
+
+// DRAW TEXT TO PIXEL
+function createTextParticles() {
+  let off = document.createElement("canvas");
+  let offCtx = off.getContext("2d");
+
+  off.width = canvas.width;
+  off.height = canvas.height;
+
+  offCtx.fillStyle = "white";
+  offCtx.font = "90px Cormorant";
+  offCtx.textAlign = "center";
+
+  offCtx.fillText("Nadd", canvas.width/2, canvas.height/2);
+
+  let data = offCtx.getImageData(0,0,canvas.width,canvas.height).data;
+
+  for (let y = 0; y < canvas.height; y += 6) {
+    for (let x = 0; x < canvas.width; x += 6) {
+      let index = (y * canvas.width + x) * 4;
+
+      if (data[index+3] > 128) {
+        textParticles.push({
+          x: Math.random()*canvas.width,
+          y: Math.random()*canvas.height,
+          tx: x,
+          ty: y
+        });
+      }
+    }
+  }
+}
+
+// ANIMATION
+let mode = "fireworks";
 
 function animate() {
   ctx.fillStyle = "rgba(0,0,0,0.2)";
   ctx.fillRect(0,0,canvas.width,canvas.height);
 
-  particles.forEach((p, i) => {
-    ctx.fillStyle = p.color;
-    ctx.fillRect(p.x, p.y, 3, 3);
+  if (mode === "fireworks") {
+    particles.forEach((p, i) => {
+      ctx.fillStyle = "white";
+      ctx.fillRect(p.x, p.y, 2, 2);
 
-    p.x += p.dx;
-    p.y += p.dy;
-    p.life--;
+      p.x += p.dx;
+      p.y += p.dy;
+      p.life--;
 
-    if (p.life <= 0) particles.splice(i,1);
-  });
+      if (p.life <= 0) particles.splice(i,1);
+    });
+  }
+
+  if (mode === "text") {
+    textParticles.forEach(p => {
+      ctx.fillStyle = "white";
+      ctx.fillRect(p.x, p.y, 2, 2);
+
+      // move toward target
+      p.x += (p.tx - p.x) * 0.05;
+      p.y += (p.ty - p.y) * 0.05;
+    });
+  }
 
   requestAnimationFrame(animate);
 }
 
-setInterval(createFirework, 700);
+setInterval(createFirework, 500);
 animate();
 
-// SHOW NAME (transform feel)
+// SWITCH TO TEXT
 setTimeout(() => {
-  let text = document.getElementById("finalText");
-  text.style.opacity = 1;
-  text.style.transform = "translate(-50%, -50%) scale(1)";
+  mode = "text";
+  particles = [];
+  createTextParticles();
 }, 5000);
 
-// CLICK → PAGE 3
-document.getElementById("finalText").addEventListener("click", () => {
-  window.location.href = "ucapan.html";
+// CLICK TO NEXT PAGE
+document.addEventListener("click", () => {
+  if (mode === "text") {
+    window.location.href = "ucapan.html";
+  }
 });
-
 </script>
 
 </body>
