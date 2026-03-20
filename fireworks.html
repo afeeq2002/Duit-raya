@@ -20,8 +20,15 @@ canvas {
 <body>
 
 <canvas id="canvas"></canvas>
-
+<audio id="boomSound" src="boom.mp3" preload="auto"></audio>
 <script>
+  document.body.addEventListener("click", () => {
+  let s = document.getElementById("boomSound");
+  s.play().then(()=>{
+    s.pause();
+    s.currentTime = 0;
+  }).catch(()=>{});
+}, { once: true });
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
@@ -31,6 +38,10 @@ canvas.height = window.innerHeight;
 let particles = [];
 
 function createFirework() {
+  let s = document.getElementById("boomSound");
+s.currentTime = 0;
+s.volume = 0.2;
+s.play().catch(()=>{});
   let x = Math.random() * canvas.width;
   let y = Math.random() * canvas.height / 2;
 
