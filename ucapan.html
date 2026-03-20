@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Untuk Awak 💌</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  background:
+    linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)),
+    url('background.jpg') center/cover no-repeat;
+  color:white;
+  font-family:'Poppins', sans-serif;
+}
+
+.card {
+  max-width: 600px;
+  padding: 30px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  opacity:0;
+  transform: translateY(30px);
+  animation: fadeUp 2s ease forwards;
+}
+
+.blur-bg { filter: blur(6px); }
+
+@keyframes fadeUp {
+  to { opacity:1; transform: translateY(0); }
+}
+
+h1 {
+  font-family:'Dancing Script', cursive;
+  font-size:40px;
+}
+
+p {
+  white-space: pre-line;
+  line-height:1.8;
+}
+
+/* ===== ENVELOPE ===== */
+.envelope {
+  position: fixed;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%) scale(0);
+
+  width:40vw;
+  height:28vw;
+  max-width:500px;
+  max-height:350px;
+
+  opacity:0;
+  cursor:pointer;
+  transition:0.6s;
+}
+
+.envelope.show {
+  opacity:1;
+  transform: translate(-50%,-50%) scale(1.6);
+}
+
+.envelope.pop {
+  transform: translate(-50%,-50%) scale(1);
+}
+
+.body-env {
+  width:100%;
+  height:100%;
+  border-radius:12px;
+
+  background:
+    radial-gradient(circle, rgba(255,215,0,0.08), transparent 60%),
+    linear-gradient(135deg,#0a0a0a,#1a1a1a);
+
+  border:1.5px solid gold;
+
+  box-shadow:
+    0 0 30px rgba(255,215,0,0.2),
+    inset 0 0 10px rgba(255,255,255,0.05);
+}
+
+.pattern {
+  position:absolute;
+  width:100%;
+  height:100%;
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,215,0,0.05) 0px,
+      rgba(255,215,0,0.05) 2px,
+      transparent 2px,
+      transparent 8px
+    );
+}
+
+.line {
+  position:absolute;
+  top:50%;
+  left:10%;
+  width:80%;
+  height:1px;
+  background:gold;
+  opacity:0.4;
+}
+
+.label {
+  position:absolute;
+  top:35%;
+  width:100%;
+  text-align:center;
+  font-size:16px;
+  color:gold;
+  font-family:'Dancing Script', cursive;
+}
+
+.flap {
+  height:50%;
+  background: linear-gradient(135deg,#111,#333);
+  clip-path: polygon(0 0,100% 0,50% 100%);
+  transform-origin:top;
+  transition:0.6s;
+}
+
+.envelope.open .flap {
+  transform: rotateX(180deg);
+}
+
+/* ===== MONEY ===== */
+.money {
+  position:fixed;
+  animation: flyOut 2s ease-out forwards;
+}
+
+@keyframes flyOut {
+  0% { transform: translate(0,0); opacity:1; }
+  100% { transform: translate(var(--x),var(--y)) rotate(360deg); opacity:0; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h1>Untuk Nadd 🌙</h1>
+  <p id="text"></p>
+</div>
+
+<div id="envelope" class="envelope">
+  <div class="flap"></div>
+  <div class="body-env"></div>
+  <div class="pattern"></div>
+  <div class="line"></div>
+  <div class="label">Selamat Hari Raya</div>
+</div>
+
+<audio id="tingSound" src="ting.mp3" preload="auto"></audio>
+
+<script>
+
+const message = `Selamat Hari Raya ✨
+
+Semoga hari-hari Nadd sentiasa dipenuhi dengan kebahagiaan,
+dan senyuman yang takkan pernah hilang.
+
+Kadang benda kecil pun boleh buat hari jadi lebih tenang,
+
+Kalau ada apa-apa yang pernah buat Nadd terasa,
+Minta maaf yaa🙏🏻
+
+Semoga segalanya akan menjadi lebih baik ✨`;
+
+let i=0;
+
+function typeEffect(){
+  if(i<message.length){
+    let char=message.charAt(i);
+    text.innerHTML+=char;
+    i++;
+
+    let delay=70;
+    if(char=="\n") delay=400;
+
+    setTimeout(typeEffect,delay);
+  } else {
+
+    let env = document.getElementById("envelope");
+    let card = document.querySelector(".card");
+    let sound = document.getElementById("tingSound");
+
+    card.classList.add("blur-bg");
+
+    setTimeout(()=>{
+
+      sound.currentTime = 0;
+      sound.volume = 0.5;
+      sound.play().catch(()=>{});
+
+      setTimeout(()=>{
+        env.classList.add("show");
+
+        setTimeout(()=>{
+          env.classList.add("pop");
+        },200);
+
+      },300);
+
+    },1800);
+  }
+}
+
+setTimeout(typeEffect,1500);
+
+/* MONEY SYSTEM */
+function createMoney(x,y){
+  let money=document.createElement("div");
+  money.className="money";
+
+  let symbols=["💸","💵","💰"];
+  money.innerHTML=symbols[Math.floor(Math.random()*symbols.length)];
+
+  money.style.left=x+"px";
+  money.style.top=y+"px";
+
+  let rx=(Math.random()-0.5)*1600;
+  let ry=(Math.random()-0.5)*1600;
+
+  money.style.setProperty('--x',rx+"px");
+  money.style.setProperty('--y',ry+"px");
+
+  money.style.fontSize=(Math.random()*30+20)+"px";
+
+  document.body.appendChild(money);
+
+  setTimeout(()=>money.remove(),2500);
+}
+
+function dropMoney(){
+  let env=document.getElementById("envelope");
+  let rect=env.getBoundingClientRect();
+
+  for(let i=0;i<150;i++){
+    createMoney(rect.left+rect.width/2, rect.top+rect.height/2);
+  }
+
+  let rain=setInterval(()=>{
+    for(let i=0;i<80;i++){
+      createMoney(
+        Math.random()*window.innerWidth,
+        Math.random()*window.innerHeight
+      );
+    }
+  },80);
+
+  setTimeout(()=>clearInterval(rain),5000);
+}
+
+envelope.onclick=()=>{
+  envelope.classList.add("open");
+  dropMoney();
+
+  setTimeout(()=>{
+    window.location.href="duit.html";
+  },3000);
+};
+
+</script>
+
+</body>
+</html>
