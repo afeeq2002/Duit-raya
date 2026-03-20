@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>✨</title>
+
+<style>
+body {
+  margin:0;
+  background:black;
+  overflow:hidden;
+}
+
+canvas {
+  display:block;
+}
+
+/* button */
+.next-btn {
+  position:fixed;
+  bottom:40px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:12px 26px;
+  border-radius:30px;
+  background:rgba(255,255,255,0.12);
+  color:white;
+  border:1px solid rgba(255,255,255,0.3);
+  backdrop-filter:blur(10px);
+  cursor:pointer;
+  opacity:0;
+  transition: all 1s ease;
+  box-shadow: 0 0 10px rgba(255,255,255,0.2);
+}
+
+.next-btn.show {
+  opacity:1;
+}
+
+.next-btn:hover {
+  background:rgba(255,255,255,0.25);
+  box-shadow: 0 0 20px rgba(255,255,255,0.5);
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="canvas"></canvas>
+
+<button onclick="goNext()" class="next-btn" id="nextBtn">
+  Teruskan 🌙
+</button>
+
+<!-- SOUND -->
+<audio id="boomSound" src="boom.mp3" preload="auto"></audio>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+function createFirework() {
+  let x = Math.random() * canvas.width;
+  let y = Math.random() * canvas.height / 2;
+
+  let colors = [
+    "#ff4d4d",
+    "#ffd700",
+    "#00ffff",
+    "#ff66ff",
+    "#66ff66",
+    "#ffffff"
+  ];
+
+  let color = colors[Math.floor(Math.random() * colors.length)];
+
+  // play sound
+  let s = document.getElementById("boomSound");
+  s.currentTime = 0;
+  s.volume = 0.3;
+  s.play().catch(()=>{});
+
+  for (let i = 0; i < 80; i++) {
+    particles.push({
+      x: x,
+      y: y,
+      dx: (Math.random() - 0.5) * 8,
+      dy: (Math.random() - 0.5) * 8,
+      life: 100,
+      color: color
+    });
+  }
+}
+
+function animate() {
+  ctx.fillStyle = "rgba(0,0,0,0.2)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  particles.forEach((p, i) => {
+    ctx.fillStyle = p.color;
+    ctx.fillRect(p.x, p.y, 3, 3);
+
+    p.x += p.dx;
+    p.y += p.dy;
+    p.life--;
+
+    if (p.life <= 0) particles.splice(i,1);
+  });
+
+  requestAnimationFrame(animate);
+}
+
+setInterval(createFirework, 500);
+animate();
+
+// button muncul
+setTimeout(() => {
+  document.getElementById("nextBtn").classList.add("show");
+}, 3000);
+
+function goNext() {
+  window.location.href = "ucapan.html";
+}
+</script>
+
+</body>
+</html>
