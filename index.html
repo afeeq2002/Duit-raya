@@ -1,122 +1,114 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Untuk Awak</title>
+<meta charset="UTF-8">
+<title>Untuk Awak</title>
 
-  <!-- Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;600&display=swap" rel="stylesheet">
 
-  <style>
-    body {
-      margin:0;
-      font-family: 'Segoe UI', sans-serif;
-      color:white;
-      text-align:center;
+<style>
+body {
+  margin:0;
+  font-family:'Cormorant', serif;
+  color:white;
+  text-align:center;
+  background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+              url('background.jpg') center/cover no-repeat;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  overflow:hidden;
+}
 
-      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
-                  url('background.jpg') center/cover no-repeat;
+.container {
+  opacity:0;
+  animation: fadeIn 1.5s ease forwards;
+}
 
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      height:100vh;
-      overflow:hidden;
-    }
+@keyframes fadeIn {
+  to { opacity:1; }
+}
 
-    .container {
-      transition: opacity 1s ease;
-    }
+.fade-out {
+  opacity:0;
+  transition:opacity 1s ease;
+}
 
-    .fade-out {
-      opacity: 0;
-    }
+.name-btn {
+  font-family:'Cormorant', serif;
+  font-size:24px;
+  letter-spacing:1px;
+  padding:14px 30px;
+  border-radius:40px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border:1px solid rgba(255,255,255,0.3);
+  color:white;
+  cursor:pointer;
+  transition: all 0.3s ease;
+  min-width:260px;
+}
 
-    /* Button style (glass effect) */
-    .name-btn {
-      font-family: 'Cormorant', serif;
-      letter-spacing: 1px;
-      font-size: 22px;
+.name-btn:hover {
+  background: rgba(255,255,255,0.25);
+  transform: scale(1.05);
+}
 
-      padding: 14px 28px;
-      border-radius: 30px;
-
-      background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-
-      color: white;
-      border: 1px solid rgba(255,255,255,0.3);
-
-      cursor: pointer;
-      transition: all 0.3s ease;
-      min-width: 260px;
-    }
-
-    .name-btn:hover {
-      background: rgba(255,255,255,0.25);
-      transform: scale(1.05);
-    }
-
-    /* Cursor blinking */
-    .name-btn::after {
-      content: "|";
-      margin-left: 5px;
-      animation: blink 1s infinite;
-    }
-
-    @keyframes blink {
-      50% { opacity: 0; }
-    }
-  </style>
+#nameText {
+  text-shadow: 0 0 8px rgba(255,255,255,0.4),
+               0 0 16px rgba(255,255,255,0.2);
+}
+</style>
 </head>
 
 <body>
 
-  <div class="container" id="main">
+<div class="container" id="main">
+  <p style="opacity:0.7;">a small thing for you 🌙</p>
 
-    <p style="opacity:0.7;">a small thing for you 🌙</p>
+  <button onclick="startTransition()" class="name-btn" id="nameText"></button>
 
-    <!-- BUTTON -->
-    <button onclick="startTransition()" class="name-btn" id="nameText"></button>
+  <p style="opacity:0.5;">(tap untuk buka)</p>
+</div>
 
-    <p style="opacity:0.5;">(tap untuk buka)</p>
+<audio id="magicSound" src="universfield-magical-twinkle-242245.mp3" preload="auto"></audio>
 
-  </div>
+<script>
+const text = "Nur Fatin Nadhirah";
+let i = 0;
 
-  <!-- SOUND -->
-  <audio id="clickSound" src="sound.mp3" preload="auto"></audio>
+function typeEffect() {
+  if (i < text.length) {
+    document.getElementById("nameText").innerHTML += text.charAt(i);
 
-  <script>
-    function startTransition() {
-      const main = document.getElementById("main");
-      let sound = document.getElementById("clickSound");
+    let sound = document.getElementById("magicSound");
 
-      sound.volume = 0.4;
+    if (i % 4 === 0) {
+      sound.currentTime = 0;
+      sound.volume = 0.08;
       sound.play();
-
-      setTimeout(() => {
-        main.classList.add("fade-out");
-      }, 150);
-
-      setTimeout(() => {
-        window.location.href = "ucapan.html";
-      }, 1100);
     }
 
-    // Typing effect
-    const text = "Nur Fatin Nadhirah";
-    let i = 0;
+    i++;
+    setTimeout(typeEffect, Math.random() * 80 + 120);
+  }
+}
 
-    function typeEffect() {
-      if (i < text.length) {
-        document.getElementById("nameText").innerHTML += text.charAt(i);
-        i++;
-        setTimeout(typeEffect, 150);
-      }
-    }
+window.onload = () => {
+  setTimeout(typeEffect, 500);
+};
 
-    window.onload = typeEffect;
-  </script>
+function startTransition() {
+  const main = document.getElementById("main");
+  main.classList.add("fade-out");
+
+  setTimeout(() => {
+    window.location.href = "ucapan.html";
+  }, 1000);
+}
+</script>
 
 </body>
 </html>
