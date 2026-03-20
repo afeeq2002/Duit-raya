@@ -4,15 +4,32 @@
 <meta charset="UTF-8">
 <title>✨</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@500&display=swap" rel="stylesheet">
+
 <style>
 body {
   margin:0;
   background:black;
   overflow:hidden;
+  font-family:'Cormorant', serif;
 }
 
 canvas {
   display:block;
+}
+
+/* nama tengah */
+#finalText {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%) scale(0.8);
+  font-size:42px;
+  color:white;
+  opacity:0;
+  cursor:pointer;
+  transition: all 1.5s ease;
+  text-shadow: 0 0 20px white, 0 0 40px gold;
 }
 </style>
 </head>
@@ -20,15 +37,24 @@ canvas {
 <body>
 
 <canvas id="canvas"></canvas>
+
+<!-- SOUND -->
 <audio id="boomSound" src="boom.mp3" preload="auto"></audio>
+
+<!-- FINAL NAME -->
+<div id="finalText">Nur Fatin Nadhirah</div>
+
 <script>
-  document.body.addEventListener("click", () => {
+
+// unlock sound (iPhone/iPad)
+document.body.addEventListener("click", () => {
   let s = document.getElementById("boomSound");
   s.play().then(()=>{
     s.pause();
     s.currentTime = 0;
   }).catch(()=>{});
 }, { once: true });
+
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
@@ -38,23 +64,35 @@ canvas.height = window.innerHeight;
 let particles = [];
 
 function createFirework() {
+
+  // SOUND
   let s = document.getElementById("boomSound");
-s.currentTime = 0;
-s.volume = 0.2;
-s.play().catch(()=>{});
+  s.currentTime = 0;
+  s.volume = 0.2;
+  s.play().catch(()=>{});
+
   let x = Math.random() * canvas.width;
   let y = Math.random() * canvas.height / 2;
 
-  let colors = ["#ffffff", "#ffd700", "#ffccff"];
+  let colors = [
+    "#ff4d4d",
+    "#ffd700",
+    "#00ffff",
+    "#ff66ff",
+    "#66ff66",
+    "#ffffff"
+  ];
 
-  for (let i = 0; i < 60; i++) {
+  let color = colors[Math.floor(Math.random() * colors.length)];
+
+  for (let i = 0; i < 80; i++) {
     particles.push({
       x: x,
       y: y,
-      dx: (Math.random() - 0.5) * 6,
-      dy: (Math.random() - 0.5) * 6,
+      dx: (Math.random() - 0.5) * 8,
+      dy: (Math.random() - 0.5) * 8,
       life: 100,
-      color: colors[Math.floor(Math.random() * colors.length)]
+      color: color
     });
   }
 }
@@ -65,7 +103,7 @@ function animate() {
 
   particles.forEach((p, i) => {
     ctx.fillStyle = p.color;
-    ctx.fillRect(p.x, p.y, 2, 2);
+    ctx.fillRect(p.x, p.y, 3, 3);
 
     p.x += p.dx;
     p.y += p.dy;
@@ -77,13 +115,21 @@ function animate() {
   requestAnimationFrame(animate);
 }
 
-setInterval(createFirework, 500);
+setInterval(createFirework, 700);
 animate();
 
-// auto go to page 3
+// SHOW NAME (transform feel)
 setTimeout(() => {
-  window.location.href = "ucapan.html";
+  let text = document.getElementById("finalText");
+  text.style.opacity = 1;
+  text.style.transform = "translate(-50%, -50%) scale(1)";
 }, 5000);
+
+// CLICK → PAGE 3
+document.getElementById("finalText").addEventListener("click", () => {
+  window.location.href = "ucapan.html";
+});
+
 </script>
 
 </body>
