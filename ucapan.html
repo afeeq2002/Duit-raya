@@ -237,31 +237,28 @@ function typeEffect() {
 setTimeout(typeEffect, 1500);
 
 // 💸 DUIT DARI SAMPAUL
-function dropMoneyFromEnvelope() {
-  let container = document.getElementById("moneyContainer");
-  let env = document.getElementById("envelope");
+function createMoney(x,y){
+  let money=document.createElement("div");
+  money.className="money";
 
-  let rect = env.getBoundingClientRect();
-  let startX = rect.left + rect.width / 2;
-  let startY = rect.top + rect.height / 2;
+  let symbols=["💸","💵","💰"];
+  money.innerHTML=symbols[Math.floor(Math.random()*symbols.length)];
 
-  for (let i = 0; i < 25; i++) {
-    let money = document.createElement("div");
-    money.className = "money";
-    money.innerHTML = "💸";
+  money.style.left=x+"px";
+  money.style.top=y+"px";
 
-    money.style.left = startX + "px";
-    money.style.top = startY + "px";
+  let rx=(Math.random()-0.5)*1600;
+  let ry=(Math.random()-0.5)*1600;
 
-    let x = (Math.random() - 0.5) * 600;
-    let y = (Math.random() - 0.5) * 600;
+  money.style.setProperty('--x',rx+"px");
+  money.style.setProperty('--y',ry+"px");
 
-    money.style.setProperty('--x', x + "px");
-    money.style.setProperty('--y', y + "px");
+  money.style.fontSize=(Math.random()*30+20)+"px";
 
-    container.appendChild(money);
+  document.body.appendChild(money);
 
-    setTimeout(() => money.remove(), 1500);
+  setTimeout(()=>money.remove(),2500);
+}
   }
 }
 
