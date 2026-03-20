@@ -62,15 +62,15 @@ p {
   }
 }
 
-/* ENVELOPE */
+/* ===== SAMPAUL RAYA ===== */
 .envelope {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0);
 
-  width: 90px;
-  height: 65px;
+  width: 160px;
+  height: 110px;
 
   cursor: pointer;
   opacity: 0;
@@ -90,15 +90,33 @@ p {
 .body-env {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #16a34a, #22c55e);
-  border-radius: 8px;
+  background: linear-gradient(135deg, #065f46, #16a34a);
+  border-radius: 12px;
   position: absolute;
+  border: 2px solid gold;
+}
+
+.pattern {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255,215,0,0.15) 10%, transparent 60%);
+}
+
+.label {
+  position: absolute;
+  width: 100%;
+  top: 40%;
+  text-align: center;
+  font-size: 14px;
+  color: gold;
+  font-family: 'Dancing Script', cursive;
 }
 
 .flap {
   width: 100%;
-  height: 50%;
-  background: linear-gradient(135deg, #4ade80, #22c55e);
+  height: 55%;
+  background: linear-gradient(135deg, #22c55e, #4ade80);
 
   position: absolute;
   top: 0;
@@ -111,6 +129,33 @@ p {
 
 .envelope.open .flap {
   transform: rotateX(180deg);
+}
+
+/* ===== DUIT ===== */
+#moneyContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.money {
+  position: absolute;
+  font-size: 26px;
+  animation: flyOut 1.5s ease-out forwards;
+}
+
+@keyframes flyOut {
+  0% {
+    transform: translate(0,0) scale(1);
+    opacity:1;
+  }
+  100% {
+    transform: translate(var(--x), var(--y)) rotate(360deg);
+    opacity:0;
+  }
 }
 </style>
 </head>
@@ -126,14 +171,18 @@ p {
 <div id="envelope" class="envelope">
   <div class="flap"></div>
   <div class="body-env"></div>
+  <div class="pattern"></div>
+  <div class="label">Selamat Hari Raya</div>
 </div>
+
+<!-- DUIT -->
+<div id="moneyContainer"></div>
 
 <!-- SOUND -->
 <audio id="tingSound" src="ting.mp3" preload="auto"></audio>
 
 <script>
 
-// MESSAGE
 const message = `Selamat Hari Raya ✨
 
 Semoga hari-hari Nadd sentiasa dipenuhi dengan kebahagiaan,
@@ -151,7 +200,6 @@ Semoga segalanya akan menjadi lebih baik dari sebelumya..✨
 Apa yang saya buat ni mungkin simple je,
 tapi harap boleh buat awak tersenyum sikit hari ni`;
 
-// TYPE EFFECT
 let i = 0;
 
 function typeEffect() {
@@ -161,27 +209,22 @@ function typeEffect() {
     i++;
 
     let delay = 70;
-
     if (char === "," || char === ".") delay = 200;
     if (char === "\n") delay = 500;
 
     setTimeout(typeEffect, delay);
 
   } else {
-    // bila habis typing → effect cinematic
     let env = document.getElementById("envelope");
     let card = document.querySelector(".card");
     let sound = document.getElementById("tingSound");
 
-    // blur background
     card.classList.add("blur-bg");
 
-    // sound
     sound.currentTime = 0;
     sound.volume = 0.4;
     sound.play().catch(()=>{});
 
-    // show envelope
     setTimeout(() => {
       env.classList.add("show");
 
@@ -193,18 +236,48 @@ function typeEffect() {
   }
 }
 
-// START
 setTimeout(typeEffect, 1500);
 
-// CLICK ENVELOPE
+// 💸 DUIT DARI SAMPAUL
+function dropMoneyFromEnvelope() {
+  let container = document.getElementById("moneyContainer");
+  let env = document.getElementById("envelope");
+
+  let rect = env.getBoundingClientRect();
+  let startX = rect.left + rect.width / 2;
+  let startY = rect.top + rect.height / 2;
+
+  for (let i = 0; i < 25; i++) {
+    let money = document.createElement("div");
+    money.className = "money";
+    money.innerHTML = "💸";
+
+    money.style.left = startX + "px";
+    money.style.top = startY + "px";
+
+    let x = (Math.random() - 0.5) * 600;
+    let y = (Math.random() - 0.5) * 600;
+
+    money.style.setProperty('--x', x + "px");
+    money.style.setProperty('--y', y + "px");
+
+    container.appendChild(money);
+
+    setTimeout(() => money.remove(), 1500);
+  }
+}
+
+// CLICK
 document.getElementById("envelope").addEventListener("click", () => {
   let env = document.getElementById("envelope");
 
   env.classList.add("open");
 
+  dropMoneyFromEnvelope();
+
   setTimeout(() => {
     window.location.href = "duit.html";
-  }, 800);
+  }, 1800);
 });
 
 </script>
