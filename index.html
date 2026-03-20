@@ -73,22 +73,32 @@ body {
   <p style="opacity:0.5;">(tap untuk buka)</p>
 </div>
 
-<audio id="magicSound" src="type.mp3" preload="auto"></audio>
+<!-- AUDIO -->
+<audio id="typeSound" src="type.mp3" preload="auto"></audio>
+<audio id="clickSound" src="click.mp3" preload="auto"></audio>
 
 <script>
 const text = "Nur Fatin Nadhirah";
 let i = 0;
 
+// enable sound after user interaction (important for iPhone/iPad)
+let soundEnabled = false;
+document.addEventListener("click", () => {
+  soundEnabled = true;
+});
+
+// typing effect
 function typeEffect() {
   if (i < text.length) {
+
     document.getElementById("nameText").innerHTML += text.charAt(i);
 
-    let sound = document.getElementById("magicSound");
+    let t = document.getElementById("typeSound");
 
-    if (i % 4 === 0) {
-      sound.currentTime = 0;
-      sound.volume = 0.08;
-      sound.play();
+    if (soundEnabled && i % 4 === 0) {
+      t.currentTime = 0;
+      t.volume = 0.07;
+      t.play().catch(()=>{});
     }
 
     i++;
@@ -96,12 +106,21 @@ function typeEffect() {
   }
 }
 
+// delay start (cinematic)
 window.onload = () => {
   setTimeout(typeEffect, 500);
 };
 
+// click transition
 function startTransition() {
   const main = document.getElementById("main");
+
+  let c = document.getElementById("clickSound");
+  if (soundEnabled) {
+    c.volume = 0.2;
+    c.play().catch(()=>{});
+  }
+
   main.classList.add("fade-out");
 
   setTimeout(() => {
