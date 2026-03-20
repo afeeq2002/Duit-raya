@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Selamat Hari Raya</title>
+<title>Untuk Awak</title>
+
 <style>
 body {
   margin:0;
@@ -14,9 +15,9 @@ body {
   justify-content:center;
   align-items:center;
   height:100vh;
-  overflow:hidden;
 }
 
+/* Container fade */
 .container {
   transition: opacity 1s ease;
 }
@@ -24,30 +25,51 @@ body {
 .fade-out {
   opacity: 0;
 }
+
+/* Button style */
+.name-btn {
+  padding: 14px 28px;
+  font-size: 20px;
+  border: none;
+  border-radius: 30px;
+  background: rgba(255,255,255,0.9);
+  color: #14532d;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.name-btn:hover {
+  background: #ffffff;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255,255,255,0.6);
+}
 </style>
+
 </head>
 
 <body>
 
 <div class="container" id="main">
-  <h1>Selamat Hari Raya 🌙</h1>
-  <p>Khas untuk</p>
 
-  <h2 onclick="startTransition()" style="cursor:pointer;">
-    Nadd 💚
-  </h2>
+  <p style="opacity:0.7;">a small thing for you 🌙</p>
 
-  <p style="opacity:0.7;">(tap nama)</p>
+  <!-- BUTTON NAMA -->
+  <button onclick="startTransition()" class="name-btn">
+    Nur Fatin Nadhirah 💚
+  </button>
+
+  <p style="opacity:0.5;">(tap untuk buka)</p>
+
 </div>
 
 <script>
 function startTransition() {
   const main = document.getElementById("main");
 
-  // fade out
+  // fade out animation
   main.classList.add("fade-out");
 
-  // lepas 1 saat, pergi page 2
+  // lepas 1 saat pergi next page
   setTimeout(() => {
     window.location.href = "ucapan.html";
   }, 1000);
