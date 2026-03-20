@@ -14,9 +14,11 @@ body {
   justify-content:center;
   align-items:center;
   text-align:center;
+
   background:
     linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)),
     url('background.jpg') center/cover no-repeat;
+
   color:white;
   font-family:'Poppins', sans-serif;
 }
@@ -26,126 +28,89 @@ body {
   max-width: 600px;
   padding: 30px;
   border-radius: 20px;
+
   background: rgba(255,255,255,0.1);
   backdrop-filter: blur(10px);
+
   opacity:0;
   transform: translateY(30px);
   animation: fadeUp 2s ease forwards;
 }
 
-.blur-bg { filter: blur(6px); }
-
-@keyframes fadeUp {
-  to { opacity:1; transform: translateY(0); }
+.blur-bg {
+  filter: blur(6px);
+  transition: filter 0.5s ease;
 }
 
 h1 {
-  font-family:'Dancing Script', cursive;
-  font-size:40px;
+  font-family: 'Dancing Script', cursive;
+  font-size: 40px;
+  margin-bottom: 20px;
 }
 
 p {
-  white-space: pre-line;
   line-height:1.8;
+  font-size:16px;
+  opacity:0.9;
+  white-space: pre-line;
 }
 
-/* ===== ENVELOPE ===== */
+@keyframes fadeUp {
+  to {
+    opacity:1;
+    transform: translateY(0);
+  }
+}
+
+/* ENVELOPE */
 .envelope {
   position: fixed;
-  top:50%;
-  left:50%;
-  transform: translate(-50%,-50%) scale(0);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
 
-  width:40vw;
-  height:28vw;
-  max-width:500px;
-  max-height:350px;
+  width: 90px;
+  height: 65px;
 
-  opacity:0;
-  cursor:pointer;
-  transition:0.6s;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.6s ease;
 }
 
 .envelope.show {
-  opacity:1;
-  transform: translate(-50%,-50%) scale(1.6);
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.2);
+  box-shadow: 0 0 30px rgba(34,197,94,0.8);
 }
 
 .envelope.pop {
-  transform: translate(-50%,-50%) scale(1);
+  transform: translate(-50%, -50%) scale(1);
 }
 
 .body-env {
-  width:100%;
-  height:100%;
-  border-radius:12px;
-
-  background:
-    radial-gradient(circle, rgba(255,215,0,0.08), transparent 60%),
-    linear-gradient(135deg,#0a0a0a,#1a1a1a);
-
-  border:1.5px solid gold;
-
-  box-shadow:
-    0 0 30px rgba(255,215,0,0.2),
-    inset 0 0 10px rgba(255,255,255,0.05);
-}
-
-.pattern {
-  position:absolute;
-  width:100%;
-  height:100%;
-  background-image:
-    repeating-linear-gradient(
-      45deg,
-      rgba(255,215,0,0.05) 0px,
-      rgba(255,215,0,0.05) 2px,
-      transparent 2px,
-      transparent 8px
-    );
-}
-
-.line {
-  position:absolute;
-  top:50%;
-  left:10%;
-  width:80%;
-  height:1px;
-  background:gold;
-  opacity:0.4;
-}
-
-.label {
-  position:absolute;
-  top:35%;
-  width:100%;
-  text-align:center;
-  font-size:16px;
-  color:gold;
-  font-family:'Dancing Script', cursive;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  border-radius: 8px;
+  position: absolute;
 }
 
 .flap {
-  height:50%;
-  background: linear-gradient(135deg,#111,#333);
-  clip-path: polygon(0 0,100% 0,50% 100%);
-  transform-origin:top;
-  transition:0.6s;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(135deg, #4ade80, #22c55e);
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top;
+  transition: transform 0.6s ease;
 }
 
 .envelope.open .flap {
   transform: rotateX(180deg);
-}
-
-/* ===== MONEY ===== */
-.money {
-  position:fixed;
-  animation: flyOut 2s ease-out forwards;
-}
-
-@keyframes flyOut {
-  0% { transform: translate(0,0); opacity:1; }
-  100% { transform: translate(var(--x),var(--y)) rotate(360deg); opacity:0; }
 }
 </style>
 </head>
@@ -157,19 +122,19 @@ p {
   <p id="text"></p>
 </div>
 
+<!-- ENVELOPE -->
 <div id="envelope" class="envelope">
   <div class="flap"></div>
   <div class="body-env"></div>
-  <div class="pattern"></div>
-  <div class="line"></div>
-  <div class="label">Selamat Hari Raya</div>
 </div>
 
+<!-- SOUND -->
 <audio id="tingSound" src="ting.mp3" preload="auto"></audio>
 
 <script>
 
-const message =`Selamat Hari Raya ✨
+// MESSAGE
+const message = `Selamat Hari Raya ✨
 
 Semoga hari-hari Nadd sentiasa dipenuhi dengan kebahagiaan,
 dan senyuman yang takkan pernah hilang.
@@ -183,96 +148,64 @@ Harap boleh dimaafkan ya
 
 Semoga segalanya akan menjadi lebih baik dari sebelumya..✨
 
-let i=0;
+Apa yang saya buat ni mungkin simple je,
+tapi harap boleh buat awak tersenyum sikit hari ni`;
 
-function typeEffect(){
-  if(i<message.length){
-    let char=message.charAt(i);
-    text.innerHTML+=char;
+// TYPE EFFECT
+let i = 0;
+
+function typeEffect() {
+  if (i < message.length) {
+    let char = message.charAt(i);
+    document.getElementById("text").innerHTML += char;
     i++;
 
-    let delay=70;
-    if(char=="\n") delay=400;
+    let delay = 70;
 
-    setTimeout(typeEffect,delay);
+    if (char === "," || char === ".") delay = 200;
+    if (char === "\n") delay = 500;
+
+    setTimeout(typeEffect, delay);
+
   } else {
-
+    // bila habis typing → effect cinematic
     let env = document.getElementById("envelope");
     let card = document.querySelector(".card");
     let sound = document.getElementById("tingSound");
 
+    // blur background
     card.classList.add("blur-bg");
 
-    setTimeout(()=>{
+    // sound
+    sound.currentTime = 0;
+    sound.volume = 0.4;
+    sound.play().catch(()=>{});
 
-      sound.currentTime = 0;
-      sound.volume = 0.5;
-      sound.play().catch(()=>{});
+    // show envelope
+    setTimeout(() => {
+      env.classList.add("show");
 
-      setTimeout(()=>{
-        env.classList.add("show");
+      setTimeout(() => {
+        env.classList.add("pop");
+      }, 200);
 
-        setTimeout(()=>{
-          env.classList.add("pop");
-        },200);
-
-      },300);
-
-    },1800);
+    }, 400);
   }
 }
 
-setTimeout(typeEffect,1500);
+// START
+setTimeout(typeEffect, 1500);
 
-/* MONEY */
-function createMoney(x,y){
-  let money=document.createElement("div");
-  money.className="money";
+// CLICK ENVELOPE
+document.getElementById("envelope").addEventListener("click", () => {
+  let env = document.getElementById("envelope");
 
-  let symbols=["💸","💵","💰"];
-  money.innerHTML=symbols[Math.floor(Math.random()*symbols.length)];
+  env.classList.add("open");
 
-  money.style.left=x+"px";
-  money.style.top=y+"px";
-
-  let rx=(Math.random()-0.5)*1200;
-  let ry=Math.random()*1000;
-
-  money.style.setProperty('--x',rx+"px");
-  money.style.setProperty('--y',ry+"px");
-
-  money.style.fontSize=(Math.random()*20+20)+"px";
-
-  document.body.appendChild(money);
-
-  setTimeout(()=>money.remove(),2000);
-}
-
-function dropMoney(){
-  let env=document.getElementById("envelope");
-  let rect=env.getBoundingClientRect();
-
-  for(let i=0;i<80;i++){
-    createMoney(rect.left+rect.width/2, rect.top+rect.height/2);
-  }
-
-  let rain=setInterval(()=>{
-    for(let i=0;i<40;i++){
-      createMoney(Math.random()*window.innerWidth,-50);
-    }
-  },100);
-
-  setTimeout(()=>clearInterval(rain),4000);
-}
-
-envelope.onclick=()=>{
-  envelope.classList.add("open");
-  dropMoney();
-
-  setTimeout(()=>{
-    window.location.href="duit.html";
-  },3000);
-};
+  setTimeout(() => {
+    window.location.href = "duit.html";
+  }, 800);
+});
 
 </script>
 
