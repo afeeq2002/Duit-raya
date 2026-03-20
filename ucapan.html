@@ -14,11 +14,9 @@ body {
   justify-content:center;
   align-items:center;
   text-align:center;
-
   background:
     linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)),
     url('background.jpg') center/cover no-repeat;
-
   color:white;
   font-family:'Poppins', sans-serif;
 }
@@ -28,103 +26,114 @@ body {
   max-width: 600px;
   padding: 30px;
   border-radius: 20px;
-
   background: rgba(255,255,255,0.1);
   backdrop-filter: blur(10px);
-
   opacity:0;
   transform: translateY(30px);
   animation: fadeUp 2s ease forwards;
 }
 
-.blur-bg {
-  filter: blur(6px);
-  transition: filter 0.5s ease;
+.blur-bg { filter: blur(6px); }
+
+@keyframes fadeUp {
+  to { opacity:1; transform: translateY(0); }
 }
 
 h1 {
-  font-family: 'Dancing Script', cursive;
-  font-size: 40px;
-  margin-bottom: 20px;
+  font-family:'Dancing Script', cursive;
+  font-size:40px;
 }
 
 p {
-  line-height:1.8;
-  font-size:16px;
-  opacity:0.9;
   white-space: pre-line;
+  line-height:1.8;
 }
 
-@keyframes fadeUp {
-  to {
-    opacity:1;
-    transform: translateY(0);
-  }
-}
-
-/* ===== SAMPAUL RAYA ===== */
+/* ===== SAMPAUL RAYA BESAR ===== */
 .envelope {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0);
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%) scale(0);
 
-  width: 160px;
-  height: 110px;
+  width:260px;
+  height:180px;
 
-  cursor: pointer;
-  opacity: 0;
-  transition: all 0.6s ease;
+  opacity:0;
+  cursor:pointer;
+  transition:0.6s;
 }
 
 .envelope.show {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1.2);
-  box-shadow: 0 0 30px rgba(34,197,94,0.8);
+  opacity:1;
+  transform: translate(-50%,-50%) scale(1.4);
 }
 
 .envelope.pop {
-  transform: translate(-50%, -50%) scale(1);
+  transform: translate(-50%,-50%) scale(1);
 }
 
+/* body design */
 .body-env {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #065f46, #16a34a);
-  border-radius: 12px;
-  position: absolute;
-  border: 2px solid gold;
+  width:100%;
+  height:100%;
+  border-radius:12px;
+
+  background:
+    radial-gradient(circle, rgba(255,215,0,0.08), transparent 60%),
+    linear-gradient(135deg,#0a0a0a,#1a1a1a);
+
+  border:1.5px solid gold;
+
+  box-shadow:
+    0 0 30px rgba(255,215,0,0.2),
+    inset 0 0 10px rgba(255,255,255,0.05);
 }
 
+/* pattern */
 .pattern {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, rgba(255,215,0,0.15) 10%, transparent 60%);
+  position:absolute;
+  width:100%;
+  height:100%;
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,215,0,0.05) 0px,
+      rgba(255,215,0,0.05) 2px,
+      transparent 2px,
+      transparent 8px
+    );
 }
 
+/* line */
+.line {
+  position:absolute;
+  top:50%;
+  left:10%;
+  width:80%;
+  height:1px;
+  background:gold;
+  opacity:0.4;
+}
+
+/* label */
 .label {
-  position: absolute;
-  width: 100%;
-  top: 40%;
-  text-align: center;
-  font-size: 14px;
-  color: gold;
-  font-family: 'Dancing Script', cursive;
+  position:absolute;
+  top:35%;
+  width:100%;
+  text-align:center;
+  font-size:16px;
+  color:gold;
+  font-family:'Dancing Script', cursive;
 }
 
+/* flap */
 .flap {
-  width: 100%;
-  height: 55%;
-  background: linear-gradient(135deg, #22c55e, #4ade80);
-
-  position: absolute;
-  top: 0;
-  left: 0;
-
-  clip-path: polygon(0 0, 100% 0, 50% 100%);
-  transform-origin: top;
-  transition: transform 0.6s ease;
+  height:50%;
+  background: linear-gradient(135deg,#111,#333);
+  clip-path: polygon(0 0,100% 0,50% 100%);
+  transform-origin:top;
+  transition:0.6s;
 }
 
 .envelope.open .flap {
@@ -132,30 +141,15 @@ p {
 }
 
 /* ===== DUIT ===== */
-#moneyContainer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
 .money {
-  position: absolute;
-  font-size: 26px;
-  animation: flyOut 1.5s ease-out forwards;
+  position:fixed;
+  font-size:28px;
+  animation: flyOut 2s ease-out forwards;
 }
 
 @keyframes flyOut {
-  0% {
-    transform: translate(0,0) scale(1);
-    opacity:1;
-  }
-  100% {
-    transform: translate(var(--x), var(--y)) rotate(360deg);
-    opacity:0;
-  }
+  0% { transform: translate(0,0); opacity:1; }
+  100% { transform: translate(var(--x),var(--y)) rotate(360deg); opacity:0; }
 }
 </style>
 </head>
@@ -167,19 +161,14 @@ p {
   <p id="text"></p>
 </div>
 
-<!-- ENVELOPE -->
+<!-- SAMPAUL -->
 <div id="envelope" class="envelope">
   <div class="flap"></div>
   <div class="body-env"></div>
   <div class="pattern"></div>
+  <div class="line"></div>
   <div class="label">Selamat Hari Raya</div>
 </div>
-
-<!-- DUIT -->
-<div id="moneyContainer"></div>
-
-<!-- SOUND -->
-<audio id="tingSound" src="ting.mp3" preload="auto"></audio>
 
 <script>
 
@@ -192,93 +181,82 @@ Kadang benda kecil pun boleh buat hari jadi lebih tenang,
 
 Kalau ada apa-apa yang pernah buat Nadd terasa,
 Minta maaf yaa🙏🏻
-Mungkin ada kata-kata atau perbuatan yang tak sepatutnya
-Harap boleh dimaafkan ya
 
-Semoga segalanya akan menjadi lebih baik dari sebelumya..✨
+Semoga segalanya akan menjadi lebih baik ✨`;
 
-Apa yang saya buat ni mungkin simple je,
-tapi harap boleh buat awak tersenyum sikit hari ni`;
+let i=0;
 
-let i = 0;
-
-function typeEffect() {
-  if (i < message.length) {
-    let char = message.charAt(i);
-    document.getElementById("text").innerHTML += char;
+function typeEffect(){
+  if(i<message.length){
+    let char=message.charAt(i);
+    text.innerHTML+=char;
     i++;
 
-    let delay = 70;
-    if (char === "," || char === ".") delay = 200;
-    if (char === "\n") delay = 500;
+    let delay=70;
+    if(char=="\n") delay=400;
 
-    setTimeout(typeEffect, delay);
-
+    setTimeout(typeEffect,delay);
   } else {
-    let env = document.getElementById("envelope");
-    let card = document.querySelector(".card");
-    let sound = document.getElementById("tingSound");
+    let env=document.getElementById("envelope");
+    document.querySelector(".card").classList.add("blur-bg");
 
-    card.classList.add("blur-bg");
-
-    sound.currentTime = 0;
-    sound.volume = 0.4;
-    sound.play().catch(()=>{});
-
-    setTimeout(() => {
+    setTimeout(()=>{
       env.classList.add("show");
-
-      setTimeout(() => {
-        env.classList.add("pop");
-      }, 200);
-
-    }, 400);
+      setTimeout(()=>env.classList.add("pop"),200);
+    },400);
   }
 }
 
-setTimeout(typeEffect, 1500);
+setTimeout(typeEffect,1500);
 
-// 💸 DUIT DARI SAMPAUL
-function dropMoneyFromEnvelope() {
-  let container = document.getElementById("moneyContainer");
-  let env = document.getElementById("envelope");
+/* 💸 MONEY SYSTEM */
+function createMoney(x,y){
+  let money=document.createElement("div");
+  money.className="money";
+  money.innerHTML="💸";
 
-  let rect = env.getBoundingClientRect();
-  let startX = rect.left + rect.width / 2;
-  let startY = rect.top + rect.height / 2;
+  money.style.left=x+"px";
+  money.style.top=y+"px";
 
-  for (let i = 0; i < 25; i++) {
-    let money = document.createElement("div");
-    money.className = "money";
-    money.innerHTML = "💸";
+  let rx=(Math.random()-0.5)*800;
+  let ry=Math.random()*800;
 
-    money.style.left = startX + "px";
-    money.style.top = startY + "px";
+  money.style.setProperty('--x',rx+"px");
+  money.style.setProperty('--y',ry+"px");
 
-    let x = (Math.random() - 0.5) * 600;
-    let y = (Math.random() - 0.5) * 600;
+  document.body.appendChild(money);
 
-    money.style.setProperty('--x', x + "px");
-    money.style.setProperty('--y', y + "px");
-
-    container.appendChild(money);
-
-    setTimeout(() => money.remove(), 1500);
-  }
+  setTimeout(()=>money.remove(),2000);
 }
 
-// CLICK
-document.getElementById("envelope").addEventListener("click", () => {
-  let env = document.getElementById("envelope");
+function dropMoney(){
+  let env=document.getElementById("envelope");
+  let rect=env.getBoundingClientRect();
 
-  env.classList.add("open");
+  // burst dari sampul
+  for(let i=0;i<40;i++){
+    createMoney(rect.left+rect.width/2, rect.top+rect.height/2);
+  }
 
-  dropMoneyFromEnvelope();
+  // hujan duit full screen
+  let rain=setInterval(()=>{
+    for(let i=0;i<15;i++){
+      createMoney(Math.random()*window.innerWidth,-50);
+    }
+  },200);
 
-  setTimeout(() => {
-    window.location.href = "duit.html";
-  }, 1800);
-});
+  setTimeout(()=>clearInterval(rain),2500);
+}
+
+/* CLICK */
+envelope.onclick=()=>{
+  envelope.classList.add("open");
+  dropMoney();
+
+  setTimeout(()=>{
+    window.location.href="duit.html";
+  },2500);
+};
 
 </script>
 
