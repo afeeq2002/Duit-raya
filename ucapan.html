@@ -49,15 +49,17 @@ p {
   line-height:1.8;
 }
 
-/* ===== SAMPAUL RAYA BESAR ===== */
+/* ===== ENVELOPE ===== */
 .envelope {
   position: fixed;
   top:50%;
   left:50%;
   transform: translate(-50%,-50%) scale(0);
 
-  width:260px;
-  height:180px;
+  width:40vw;
+  height:28vw;
+  max-width:500px;
+  max-height:350px;
 
   opacity:0;
   cursor:pointer;
@@ -66,14 +68,13 @@ p {
 
 .envelope.show {
   opacity:1;
-  transform: translate(-50%,-50%) scale(1.4);
+  transform: translate(-50%,-50%) scale(1.6);
 }
 
 .envelope.pop {
   transform: translate(-50%,-50%) scale(1);
 }
 
-/* body design */
 .body-env {
   width:100%;
   height:100%;
@@ -90,7 +91,6 @@ p {
     inset 0 0 10px rgba(255,255,255,0.05);
 }
 
-/* pattern */
 .pattern {
   position:absolute;
   width:100%;
@@ -105,7 +105,6 @@ p {
     );
 }
 
-/* line */
 .line {
   position:absolute;
   top:50%;
@@ -116,7 +115,6 @@ p {
   opacity:0.4;
 }
 
-/* label */
 .label {
   position:absolute;
   top:35%;
@@ -127,7 +125,6 @@ p {
   font-family:'Dancing Script', cursive;
 }
 
-/* flap */
 .flap {
   height:50%;
   background: linear-gradient(135deg,#111,#333);
@@ -140,10 +137,9 @@ p {
   transform: rotateX(180deg);
 }
 
-/* ===== DUIT ===== */
+/* ===== MONEY ===== */
 .money {
   position:fixed;
-  font-size:28px;
   animation: flyOut 2s ease-out forwards;
 }
 
@@ -161,7 +157,6 @@ p {
   <p id="text"></p>
 </div>
 
-<!-- SAMPAUL -->
 <div id="envelope" class="envelope">
   <div class="flap"></div>
   <div class="body-env"></div>
@@ -170,9 +165,11 @@ p {
   <div class="label">Selamat Hari Raya</div>
 </div>
 
+<audio id="tingSound" src="ting.mp3" preload="auto"></audio>
+
 <script>
 
-const message = `Selamat Hari Raya ✨
+const message =`Selamat Hari Raya ✨
 
 Semoga hari-hari Nadd sentiasa dipenuhi dengan kebahagiaan,
 dan senyuman yang takkan pernah hilang.
@@ -181,8 +178,10 @@ Kadang benda kecil pun boleh buat hari jadi lebih tenang,
 
 Kalau ada apa-apa yang pernah buat Nadd terasa,
 Minta maaf yaa🙏🏻
+Mungkin ada kata-kata atau perbuatan yang tak sepatutnya
+Harap boleh dimaafkan ya
 
-Semoga segalanya akan menjadi lebih baik ✨`;
+Semoga segalanya akan menjadi lebih baik dari sebelumya..✨
 
 let i=0;
 
@@ -197,32 +196,52 @@ function typeEffect(){
 
     setTimeout(typeEffect,delay);
   } else {
-    let env=document.getElementById("envelope");
-    document.querySelector(".card").classList.add("blur-bg");
+
+    let env = document.getElementById("envelope");
+    let card = document.querySelector(".card");
+    let sound = document.getElementById("tingSound");
+
+    card.classList.add("blur-bg");
 
     setTimeout(()=>{
-      env.classList.add("show");
-      setTimeout(()=>env.classList.add("pop"),200);
-    },400);
+
+      sound.currentTime = 0;
+      sound.volume = 0.5;
+      sound.play().catch(()=>{});
+
+      setTimeout(()=>{
+        env.classList.add("show");
+
+        setTimeout(()=>{
+          env.classList.add("pop");
+        },200);
+
+      },300);
+
+    },1800);
   }
 }
 
 setTimeout(typeEffect,1500);
 
-/* 💸 MONEY SYSTEM */
+/* MONEY */
 function createMoney(x,y){
   let money=document.createElement("div");
   money.className="money";
-  money.innerHTML="💸";
+
+  let symbols=["💸","💵","💰"];
+  money.innerHTML=symbols[Math.floor(Math.random()*symbols.length)];
 
   money.style.left=x+"px";
   money.style.top=y+"px";
 
-  let rx=(Math.random()-0.5)*800;
-  let ry=Math.random()*800;
+  let rx=(Math.random()-0.5)*1200;
+  let ry=Math.random()*1000;
 
   money.style.setProperty('--x',rx+"px");
   money.style.setProperty('--y',ry+"px");
+
+  money.style.fontSize=(Math.random()*20+20)+"px";
 
   document.body.appendChild(money);
 
@@ -233,29 +252,26 @@ function dropMoney(){
   let env=document.getElementById("envelope");
   let rect=env.getBoundingClientRect();
 
-  // burst dari sampul
-  for(let i=0;i<40;i++){
+  for(let i=0;i<80;i++){
     createMoney(rect.left+rect.width/2, rect.top+rect.height/2);
   }
 
-  // hujan duit full screen
   let rain=setInterval(()=>{
-    for(let i=0;i<15;i++){
+    for(let i=0;i<40;i++){
       createMoney(Math.random()*window.innerWidth,-50);
     }
-  },200);
+  },100);
 
-  setTimeout(()=>clearInterval(rain),2500);
+  setTimeout(()=>clearInterval(rain),4000);
 }
 
-/* CLICK */
 envelope.onclick=()=>{
   envelope.classList.add("open");
   dropMoney();
 
   setTimeout(()=>{
     window.location.href="duit.html";
-  },2500);
+  },3000);
 };
 
 </script>
