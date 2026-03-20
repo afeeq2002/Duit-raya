@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>✨</title>
 
+<!-- FONT -->
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@600&display=swap" rel="stylesheet">
 
 <style>
@@ -70,7 +71,7 @@ function createTextParticles() {
   off.height = canvas.height;
 
   offCtx.fillStyle = "white";
-  offCtx.font = "90px Cormorant";
+  offCtx.font = "italic bold 95px Cormorant"; // 🔥 UPDATED FONT
   offCtx.textAlign = "center";
   offCtx.textBaseline = "middle";
 
@@ -120,7 +121,7 @@ function animate() {
       ctx.fillStyle = p.color;
       ctx.fillRect(p.x, p.y, 2, 2);
 
-      // slow movement
+      // 🐢 slow smooth movement
       p.x += (p.tx - p.x) * 0.02;
       p.y += (p.ty - p.y) * 0.02;
     });
@@ -132,7 +133,7 @@ function animate() {
 setInterval(createFirework, 700);
 animate();
 
-// 🔄 TRANSFORM TO NAME
+// 🔄 TRANSFORM TO "Nadd"
 setTimeout(() => {
   mode = "text";
   particles = [];
