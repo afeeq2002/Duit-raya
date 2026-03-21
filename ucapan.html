@@ -14,17 +14,22 @@ body {
   justify-content:center;
   align-items:center;
   text-align:center;
-  background: linear-gradient(black, #111);
+
+  background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+              url('background.jpg') center/cover no-repeat;
+
   color:white;
   font-family:'Poppins', sans-serif;
 }
 
+/* CARD */
 .card {
   max-width:600px;
   padding:30px;
   border-radius:20px;
-  background:rgba(255,255,255,0.1);
-  backdrop-filter:blur(10px);
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(12px);
+  box-shadow:0 10px 30px rgba(0,0,0,0.4);
 }
 
 h1 {
@@ -40,46 +45,67 @@ p {
 /* ENVELOPE */
 .envelope {
   position:fixed;
-  top:50%;
+  bottom:80px;
   left:50%;
-  transform:translate(-50%,-50%) scale(0);
+  transform:translateX(-50%) scale(0.8);
 
-  width:40vw;
-  height:28vw;
-  max-width:500px;
-  max-height:350px;
+  width:180px;
+  height:120px;
 
   opacity:0;
   cursor:pointer;
-  transition:0.6s;
+  transition:0.5s ease;
 }
 
 .envelope.show {
   opacity:1;
-  transform:translate(-50%,-50%) scale(1.5);
+  transform:translateX(-50%) scale(1);
 }
 
-.envelope.pop {
-  transform:translate(-50%,-50%) scale(1);
-}
-
+/* BODY */
 .body-env {
   width:100%;
   height:100%;
-  background:linear-gradient(#111,#222);
-  border:2px solid gold;
-  border-radius:12px;
+  background:#fff;
+  border-radius:10px;
+  position:relative;
+  z-index:1;
 }
 
+/* FLAP */
 .flap {
-  height:50%;
-  background:#222;
-  clip-path:polygon(0 0,100% 0,50% 100%);
-  transition:0.6s;
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:#e5e5e5;
+  clip-path:polygon(0 0,100% 0,50% 60%);
+  transform-origin:top;
+  transition:0.6s ease;
+  z-index:2;
 }
 
+/* OPEN */
 .envelope.open .flap {
   transform:rotateX(180deg);
+}
+
+/* duit preview */
+.money {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,20px);
+  opacity:0;
+  font-size:16px;
+  color:#14532d;
+  font-weight:bold;
+  transition:0.5s;
+  z-index:0;
+}
+
+.envelope.open .money {
+  transform:translate(-50%,-40px);
+  opacity:1;
 }
 </style>
 </head>
@@ -94,7 +120,10 @@ p {
 <div id="envelope" class="envelope">
   <div class="flap"></div>
   <div class="body-env"></div>
+  <div class="money">💵 Untuk Nadd</div>
 </div>
+
+<audio id="sound" src="sound.mp3"></audio>
 
 <script>
 
@@ -122,8 +151,8 @@ function typeEffect(){
     textEl.innerHTML += char;
     i++;
 
-    let delay = 70;
-    if(char === "\n") delay = 400;
+    let delay = 60;
+    if(char === "\n") delay = 300;
 
     setTimeout(typeEffect, delay);
 
@@ -137,22 +166,18 @@ function showEnvelope(){
 
   setTimeout(()=>{
     env.classList.add("show");
-
-    setTimeout(()=>{
-      env.classList.add("pop");
-    },200);
-
-  },1500);
+  },1200);
 }
 
 document.getElementById("envelope").onclick = () => {
   const env = document.getElementById("envelope");
 
   env.classList.add("open");
+  document.getElementById("sound").play();
 
   setTimeout(()=>{
     window.location.href = "duit.html";
-  },2000);
+  },1800);
 };
 
 setTimeout(typeEffect,1000);
