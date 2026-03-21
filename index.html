@@ -29,23 +29,22 @@
       gap:18px;
     }
 
-    /* hidden state */
     .hidden {
       opacity:0;
     }
 
-    /* 💥 DROP + BOUNCE (SMOOTH VERSION) */
+    /* 💥 DROP + BOUNCE */
     @keyframes dropBounce {
       0% {
         opacity:0;
-        transform: translateY(-100px);
+        transform: translateY(-120px);
       }
       70% {
         opacity:1;
-        transform: translateY(8px);
+        transform: translateY(10px);
       }
       85% {
-        transform: translateY(-3px);
+        transform: translateY(-4px);
       }
       100% {
         transform: translateY(0);
@@ -53,7 +52,7 @@
     }
 
     .drop {
-      animation: dropBounce 1.6s ease forwards;
+      animation: dropBounce 1.8s ease forwards;
     }
 
     .name-btn {
@@ -75,12 +74,6 @@
       min-width: 280px;
 
       box-shadow: 0 0 20px rgba(255,255,255,0.1);
-    }
-
-    .name-btn:hover {
-      background: rgba(255,255,255,0.25);
-      transform: scale(1.05);
-      box-shadow: 0 0 30px rgba(255,255,255,0.25);
     }
 
     .name-btn::after {
@@ -124,7 +117,7 @@
 
 </div>
 
-<audio id="clickSound" src="sound.mp3" preload="auto"></audio>
+<audio id="clickSound" src="sound.mp3"></audio>
 
 <script>
 
@@ -142,32 +135,35 @@ function startTransition(){
   },1200);
 }
 
-/* 🎬 SMOOTH FLOW */
+/* 🎬 FLOW IKUT REQUEST KAU */
 window.onload = () => {
 
-  // 1️⃣ text (slow masuk)
+  // 💤 kosong dulu (important feel)
   setTimeout(()=>{
+
+    // 1️⃣ text jatuh
     document.getElementById("line1").classList.remove("hidden");
     document.getElementById("line1").classList.add("drop");
-  },800);
 
-  // 2️⃣ nama (slow + typing)
+  },1500);
+
+  // 2️⃣ nama jatuh + typing slow
   setTimeout(()=>{
     const btn = document.getElementById("nameText");
     btn.classList.remove("hidden");
     btn.classList.add("drop");
     typeEffect();
-  },2200);
+  },3200);
 
-  // 3️⃣ hint (last)
+  // 3️⃣ hint last
   setTimeout(()=>{
     document.getElementById("hint").classList.remove("hidden");
     document.getElementById("hint").classList.add("drop");
-  },4200);
+  },5500);
 
 };
 
-/* typing (slow & smooth) */
+/* ✍️ TYPING SLOW VERSION */
 const text="Nur Fatin Nadhirah";
 let i=0;
 
@@ -176,10 +172,11 @@ function typeEffect(){
     document.getElementById("nameText").innerHTML += text.charAt(i);
     i++;
 
-    let delay = 110;
+    let delay = 140; // slow base
 
-    if(i > text.length - 3){
-      delay = 150;
+    // slow lagi dekat ending
+    if(i > text.length - 4){
+      delay = 180;
     }
 
     setTimeout(typeEffect, delay);
