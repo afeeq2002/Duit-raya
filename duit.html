@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Duit Raya 💚</title>
+<title>Duit Raya</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300&display=swap" rel="stylesheet">
 
@@ -27,24 +27,16 @@ body {
 .money {
   position:fixed;
   top:-50px;
-  font-size:22px;
+  font-size:20px;
   animation: fall linear infinite;
-  opacity:0.6;
+  opacity:0.4;
 }
 
 @keyframes fall {
   to { transform: translateY(110vh); }
 }
 
-/* intro text */
-#intro {
-  font-size:20px;
-  margin-bottom:30px;
-  opacity:0;
-  transition:1s;
-}
-
-/* card */
+/* CARD */
 .card {
   width:300px;
   height:200px;
@@ -52,7 +44,28 @@ body {
   transform-style:preserve-3d;
   transition:1s;
   cursor:pointer;
-  display:none;
+
+  opacity:0;
+  transform:scale(0.7);
+}
+
+.card.show {
+  animation: cardIn 1s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+
+@keyframes cardIn {
+  0% {
+    opacity:0;
+    transform:scale(0.7);
+  }
+  60% {
+    opacity:1;
+    transform:scale(1.05);
+  }
+  100% {
+    opacity:1;
+    transform:scale(1);
+  }
 }
 
 .card-inner {
@@ -70,6 +83,7 @@ body {
 }
 
 .front { backface-visibility:hidden; }
+
 .back {
   transform:rotateY(180deg);
   backface-visibility:hidden;
@@ -86,95 +100,86 @@ body {
   box-shadow:
     0 0 20px rgba(34,197,94,0.6),
     0 0 40px rgba(255,215,0,0.4);
-  animation: pulse 2s infinite;
+  animation: pulse 2.5s infinite;
 }
 
 @keyframes pulse {
   0%,100% { transform:scale(1); }
-  50% { transform:scale(1.05); }
+  50% { transform:scale(1.06); }
 }
 
 /* button */
 .button {
-  margin-top:15px;
+  margin-top:20px;
   padding:8px 20px;
   border:1px solid white;
   border-radius:20px;
   font-size:14px;
   opacity:0.8;
+  letter-spacing:1px;
 }
 </style>
 </head>
 
 <body>
 
-<div id="intro"></div>
-
 <div id="card" class="card" onclick="flipCard()">
   <div class="card-inner front">
-    <div style="font-family:'Dancing Script';font-size:26px;">
-      Untuk Nadd 💚
+    <div style="font-family:'Dancing Script';font-size:28px;">
+      Untuk Nadd
     </div>
-    <div style="font-size:14px;opacity:0.8;">
-      Duit raya khas untuk awak
+
+    <div class="button">
+      Tekan kalau sudi…
     </div>
-    <div class="button">Tap untuk buka</div>
   </div>
 
   <div class="card-inner back">
-    <!-- 🔥 QR KAU -->
     <img src="packet.png" class="qr">
-    <div style="font-size:13px;margin-top:10px;">
-      Claim duit raya awak 💚
+    <div style="font-size:13px;margin-top:10px; opacity:0.85;">
+      Jangan lupa claim tau 😉
     </div>
   </div>
 </div>
 
+<!-- 🎵 SAME MUSIC AS PAGE 3 -->
+<audio id="bgMusic" src="music.mp3" loop></audio>
+
 <script>
 
-/* 💸 duit jatuh background */
-for(let i=0;i<50;i++){
+/* 💸 duit jatuh */
+for(let i=0;i<35;i++){
   let d=document.createElement("div");
   d.className="money";
   d.innerHTML="💸";
   d.style.left=Math.random()*100+"vw";
-  d.style.animationDuration=(3+Math.random()*4)+"s";
+  d.style.animationDuration=(5+Math.random()*4)+"s";
   document.body.appendChild(d);
 }
 
-/* text type */
-const text="Ada sesuatu untuk Nadd...";
-let i=0;
-
-function typeIntro(){
-  const el=document.getElementById("intro");
-
-  if(i<text.length){
-    el.innerHTML+=text.charAt(i);
-    i++;
-    setTimeout(typeIntro,70);
-  }else{
-    showCard();
-  }
-}
-
-/* show intro */
-setTimeout(()=>{
-  document.getElementById("intro").style.opacity=1;
-  typeIntro();
-},800);
-
 /* show card */
-function showCard(){
-  setTimeout(()=>{
-    document.getElementById("card").style.display="block";
-  },800);
-}
+setTimeout(()=>{
+  document.getElementById("card").classList.add("show");
+},1200);
 
 /* flip */
 function flipCard(){
   document.getElementById("card").classList.toggle("flipped");
 }
+
+/* play music */
+window.onload = () => {
+
+  const music = document.getElementById("bgMusic");
+  music.volume = 0.25;
+  music.play().catch(()=>{});
+
+};
+
+/* unlock audio */
+document.addEventListener("click", () => {
+  document.getElementById("bgMusic").play().catch(()=>{});
+}, { once: true });
 
 </script>
 
