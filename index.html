@@ -46,27 +46,16 @@
 
     /* 💥 bounce nama */
     @keyframes bounce {
-      0% {
-        opacity:0;
-        transform: translateY(-100px);
-      }
-      60% {
-        opacity:1;
-        transform: translateY(8px);
-      }
-      80% {
-        transform: translateY(-4px);
-      }
-      100% {
-        transform: translateY(0);
-      }
+      0% { opacity:0; transform: translateY(-100px); }
+      60% { opacity:1; transform: translateY(8px); }
+      80% { transform: translateY(-4px); }
+      100% { transform: translateY(0); }
     }
 
     .bounce {
       animation: bounce 1.6s ease forwards;
     }
 
-    /* hidden element */
     .hidden {
       opacity:0;
     }
@@ -112,15 +101,14 @@
       font-size:14px;
     }
 
-    /* 🔥 HINT FIXED */
+    /* 💥 HINT FINAL (animation only) */
     #hint {
-      opacity:0; /* start hidden */
+      opacity:0;
       font-size:12px;
-      transition: opacity 1s ease;
     }
 
     .show-hint {
-      opacity:0.5;
+      animation: fadeIn 1.2s ease forwards;
     }
 
     .fade-out {
@@ -163,7 +151,7 @@ function startTransition(){
 
 window.onload = () => {
 
-  // kosong dulu
+  // 💤 kosong dulu
   setTimeout(()=>{
 
     const main = document.getElementById("main");
@@ -203,7 +191,7 @@ function typeEffect(){
     setTimeout(typeEffect, delay);
 
   } else {
-    // 💥 ONLY here hint appear
+    // 💥 ONLY here hint keluar
     setTimeout(()=>{
       document.getElementById("hint").classList.add("show-hint");
     },700);
