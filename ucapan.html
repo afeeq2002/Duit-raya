@@ -107,6 +107,25 @@ p {
   transform:translate(-50%,-40px);
   opacity:1;
 }
+
+/* 💸 DUIT TERBANG */
+.money-fly {
+  position:fixed;
+  font-size:28px;
+  pointer-events:none;
+  animation: fly 1.5s ease-out forwards;
+}
+
+@keyframes fly {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-200px) scale(1.5) rotate(20deg);
+    opacity: 0;
+  }
+}
 </style>
 </head>
 
@@ -166,7 +185,7 @@ function showEnvelope(){
 
   setTimeout(()=>{
     env.classList.add("show");
-  },1200);
+  },1500); // delay sikit bagi feel
 }
 
 document.getElementById("envelope").onclick = () => {
@@ -174,6 +193,18 @@ document.getElementById("envelope").onclick = () => {
 
   env.classList.add("open");
   document.getElementById("sound").play();
+
+  // 💸 DUIT TERBANG FULL SCREEN
+  for(let i=0;i<25;i++){
+    let d = document.createElement("div");
+    d.className = "money-fly";
+    d.innerHTML = "💵";
+    d.style.left = Math.random()*100 + "vw";
+    d.style.top = Math.random()*100 + "vh";
+    document.body.appendChild(d);
+
+    setTimeout(()=>d.remove(),1500);
+  }
 
   setTimeout(()=>{
     window.location.href = "duit.html";
