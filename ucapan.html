@@ -10,26 +10,37 @@
 body {
   margin:0;
   height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
   overflow:hidden;
-
   background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
               url('background.jpg') center/cover no-repeat;
-
   color:white;
   font-family:'Poppins', sans-serif;
 }
 
-.card {
+/* TEXT */
+.text-center {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-65%);
   max-width:600px;
-  padding:30px;
-  border-radius:20px;
-  background:rgba(255,255,255,0.08);
-  backdrop-filter:blur(12px);
-  box-shadow:0 10px 30px rgba(0,0,0,0.4);
+  text-align:center;
+  opacity:0;
+}
+
+.text-center.show {
+  animation: textIn 1.2s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+
+@keyframes textIn {
+  0% {
+    opacity:0;
+    transform:translate(-50%,-75%);
+  }
+  100% {
+    opacity:1;
+    transform:translate(-50%,-50%);
+  }
 }
 
 h1 {
@@ -42,6 +53,41 @@ p {
   line-height:1.7;
 }
 
+/* CARD */
+.card {
+  position:absolute;
+  bottom:80px;
+  left:50%;
+  padding:25px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(12px);
+  box-shadow:0 10px 30px rgba(0,0,0,0.4);
+
+  opacity:0;
+  transform:translateX(-50%) translateY(80px) scale(0.92);
+}
+
+.card.show {
+  animation: cardIn 1.2s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+
+@keyframes cardIn {
+  0% {
+    opacity:0;
+    transform:translateX(-50%) translateY(80px) scale(0.92);
+  }
+  60% {
+    opacity:1;
+    transform:translateX(-50%) translateY(-6px) scale(1.02);
+  }
+  100% {
+    opacity:1;
+    transform:translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+/* ENVELOPE */
 .envelope {
   position:fixed;
   top:50%;
@@ -57,8 +103,13 @@ p {
 .envelope.show {
   opacity:1;
   transform:translate(-50%,-50%) scale(1);
-  box-shadow:0 10px 40px rgba(0,0,0,0.6),
-             0 0 25px rgba(255,215,0,0.25);
+  animation: glowPulse 2.5s infinite;
+}
+
+@keyframes glowPulse {
+  0% { box-shadow:0 0 15px rgba(255,215,0,0.2); }
+  50% { box-shadow:0 0 30px rgba(255,215,0,0.5); }
+  100% { box-shadow:0 0 15px rgba(255,215,0,0.2); }
 }
 
 .body-env {
@@ -82,33 +133,29 @@ p {
   position:absolute;
   width:100%;
   height:100%;
-
-  /* warna sama macam body */
   background: linear-gradient(135deg,#064e3b,#065f46);
-
-  /* lighting effect */
-  background-image:
-    linear-gradient(135deg,#064e3b,#065f46),
-    radial-gradient(circle at 50% 0%, rgba(255,255,255,0.25), transparent 60%);
-
   clip-path:polygon(0 0,100% 0,50% 60%);
   transform-origin:top;
-  transition:0.6s ease;
-  z-index:2;
-
-  /* depth + shadow */
-  box-shadow:
-    inset 0 -8px 15px rgba(0,0,0,0.4),
-    0 5px 10px rgba(0,0,0,0.3);
-
-  /* gold line */
-  border-bottom:1px solid rgba(255,215,0,0.6);
+  transition:0.9s cubic-bezier(0.22,1,0.36,1);
 }
 
 .envelope.open .flap {
   transform:rotateX(180deg);
 }
 
+/* LIGHT */
+.light {
+  position:fixed;
+  top:50%;
+  left:50%;
+  width:200px;
+  height:200px;
+  background:radial-gradient(circle, rgba(255,215,0,0.5), transparent 70%);
+  transform:translate(-50%,-50%);
+  opacity:0;
+}
+
+/* MONEY */
 .money-fly {
   position:fixed;
   pointer-events:none;
@@ -116,26 +163,22 @@ p {
 }
 
 @keyframes burst {
-  0% {
-    transform: translate(0,0) scale(0.5);
-    opacity:0;
-  }
-  30% {
-    opacity:1;
-  }
-  100% {
-    transform: translate(var(--x), var(--y)) scale(1.2) rotate(360deg);
-    opacity:0;
-  }
+  0% { transform: translate(0,0) scale(0.5); opacity:0; }
+  30% { opacity:1; }
+  100% { transform: translate(var(--x), var(--y)) scale(1.2); opacity:0; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="card">
+<div class="text-center">
   <h1>Untuk Nadd 🌙</h1>
   <p id="text"></p>
+</div>
+
+<div class="card">
+  <p>💌 a small gift for you</p>
 </div>
 
 <div id="envelope" class="envelope">
@@ -148,7 +191,6 @@ p {
 <audio id="sound" src="sound.mp3"></audio>
 
 <script>
-
 const message = `Selamat Hari Raya ✨
 
 Semoga hari-hari Nadd sentiasa dipenuhi dengan kebahagiaan,
@@ -179,6 +221,11 @@ function typeEffect(){
     setTimeout(typeEffect, delay);
 
   } else {
+
+    setTimeout(()=>{
+      document.querySelector(".card").classList.add("show");
+    },700);
+
     showEnvelope();
   }
 }
@@ -209,58 +256,48 @@ function showEnvelope(){
 
 document.getElementById("envelope").onclick = () => {
   const env = document.getElementById("envelope");
-
   env.classList.add("open");
-  document.getElementById("sound").play();
 
-  // 💥 BURST (BANYAK GILA)
-  for(let i=0;i<220;i++){
+  let s = document.getElementById("sound");
+  s.currentTime = 0;
+  s.play();
+
+  let light = document.createElement("div");
+  light.className = "light";
+  document.body.appendChild(light);
+
+  setTimeout(()=> light.style.opacity = "1",100);
+  setTimeout(()=> light.style.opacity = "0",900);
+
+  for(let i=0;i<160;i++){
     let d = document.createElement("div");
     d.className = "money-fly";
     d.innerHTML = Math.random() > 0.5 ? "💵" : "💸";
 
-    d.style.left = (window.innerWidth/2) + "px";
-    d.style.top = (window.innerHeight/2) + "px";
+    d.style.left = window.innerWidth/2 + "px";
+    d.style.top = window.innerHeight/2 + "px";
 
-    let x = (Math.random() - 0.5) * 2000;
-    let y = (Math.random() - 0.5) * 2000;
+    let angle = Math.random()*2*Math.PI;
+    let dist = 600 + Math.random()*600;
 
-    d.style.setProperty('--x', x + "px");
-    d.style.setProperty('--y', y + "px");
-
-    d.style.fontSize = (18 + Math.random()*30) + "px";
+    d.style.setProperty('--x', Math.cos(angle)*dist + "px");
+    d.style.setProperty('--y', Math.sin(angle)*dist + "px");
 
     document.body.appendChild(d);
-
-    setTimeout(()=>d.remove(),2000);
-  }
-
-  // 🌧️ RAIN
-  for(let i=0;i<180;i++){
-    let d = document.createElement("div");
-    d.className = "money-fly";
-    d.innerHTML = "💸";
-
-    d.style.left = Math.random()*100 + "vw";
-    d.style.top = "-50px";
-
-    d.style.setProperty('--x', (Math.random()*300 -150) + "px");
-    d.style.setProperty('--y', (1000 + Math.random()*600) + "px");
-
-    d.style.fontSize = (15 + Math.random()*25) + "px";
-
-    document.body.appendChild(d);
-
     setTimeout(()=>d.remove(),2000);
   }
 
   setTimeout(()=>{
     window.location.href = "duit.html";
-  },2400);
+  },2600);
 };
 
-setTimeout(typeEffect,1000);
-
+window.onload = () => {
+  setTimeout(()=>{
+    document.querySelector(".text-center").classList.add("show");
+    setTimeout(()=> typeEffect(),800);
+  },500);
+};
 </script>
 
 </body>
