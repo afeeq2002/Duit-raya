@@ -1,1 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Duit Raya 💚</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin:0;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+
+  background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+              url('background.jpg') center/cover no-repeat;
+
+  font-family:'Poppins';
+  color:white;
+}
+
+/* 💸 duit jatuh */
+.money {
+  position:fixed;
+  top:-50px;
+  font-size:22px;
+  animation: fall linear infinite;
+  opacity:0.6;
+}
+
+@keyframes fall {
+  to { transform: translateY(110vh); }
+}
+
+/* intro text */
+#intro {
+  font-size:20px;
+  margin-bottom:30px;
+  opacity:0;
+  transition:1s;
+}
+
+/* card */
+.card {
+  width:300px;
+  height:200px;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:1s;
+  cursor:pointer;
+  display:none;
+}
+
+.card-inner {
+  position:absolute;
+  width:100%;
+  height:100%;
+  border-radius:20px;
+  backdrop-filter:blur(12px);
+  background:rgba(255,255,255,0.08);
+  box-shadow:0 0 30px rgba(34,197,94,0.4);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+}
+
+.front { backface-visibility:hidden; }
+.back {
+  transform:rotateY(180deg);
+  backface-visibility:hidden;
+}
+
+.card.flipped {
+  transform:rotateY(180deg);
+}
+
+/* QR */
+.qr {
+  width:180px;
+  border-radius:12px;
+  box-shadow:
+    0 0 20px rgba(34,197,94,0.6),
+    0 0 40px rgba(255,215,0,0.4);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,100% { transform:scale(1); }
+  50% { transform:scale(1.05); }
+}
+
+/* button */
+.button {
+  margin-top:15px;
+  padding:8px 20px;
+  border:1px solid white;
+  border-radius:20px;
+  font-size:14px;
+  opacity:0.8;
+}
+</style>
+</head>
+
+<body>
+
+<div id="intro"></div>
+
+<div id="card" class="card" onclick="flipCard()">
+  <div class="card-inner front">
+    <div style="font-family:'Dancing Script';font-size:26px;">
+      Untuk Nadd 💚
+    </div>
+    <div style="font-size:14px;opacity:0.8;">
+      Duit raya khas untuk awak
+    </div>
+    <div class="button">Tap untuk buka</div>
+  </div>
+
+  <div class="card-inner back">
+    <!-- 🔥 QR KAU -->
+    <img src="packet.png" class="qr">
+    <div style="font-size:13px;margin-top:10px;">
+      Claim duit raya awak 💚
+    </div>
+  </div>
+</div>
+
+<script>
+
+/* 💸 duit jatuh background */
+for(let i=0;i<50;i++){
+  let d=document.createElement("div");
+  d.className="money";
+  d.innerHTML="💸";
+  d.style.left=Math.random()*100+"vw";
+  d.style.animationDuration=(3+Math.random()*4)+"s";
+  document.body.appendChild(d);
+}
+
+/* text type */
+const text="Ada sesuatu untuk Nadd...";
+let i=0;
+
+function typeIntro(){
+  const el=document.getElementById("intro");
+
+  if(i<text.length){
+    el.innerHTML+=text.charAt(i);
+    i++;
+    setTimeout(typeIntro,70);
+  }else{
+    showCard();
+  }
+}
+
+/* show intro */
+setTimeout(()=>{
+  document.getElementById("intro").style.opacity=1;
+  typeIntro();
+},800);
+
+/* show card */
+function showCard(){
+  setTimeout(()=>{
+    document.getElementById("card").style.display="block";
+  },800);
+}
+
+/* flip */
+function flipCard(){
+  document.getElementById("card").classList.toggle("flipped");
+}
+
+</script>
+
+</body>
+</html>
