@@ -53,57 +53,38 @@ p {
   line-height:1.7;
 }
 
-/* CARD */
-.card {
-  position:absolute;
-  bottom:80px;
-  left:50%;
-  padding:25px;
-  border-radius:20px;
-  background:rgba(255,255,255,0.08);
-  backdrop-filter:blur(12px);
-  box-shadow:0 10px 30px rgba(0,0,0,0.4);
-
-  opacity:0;
-  transform:translateX(-50%) translateY(80px) scale(0.92);
-}
-
-.card.show {
-  animation: cardIn 1.2s cubic-bezier(0.22,1,0.36,1) forwards;
-}
-
-@keyframes cardIn {
-  0% {
-    opacity:0;
-    transform:translateX(-50%) translateY(80px) scale(0.92);
-  }
-  60% {
-    opacity:1;
-    transform:translateX(-50%) translateY(-6px) scale(1.02);
-  }
-  100% {
-    opacity:1;
-    transform:translateX(-50%) translateY(0) scale(1);
-  }
-}
-
-/* ENVELOPE */
+/* ENVELOPE DROP */
 .envelope {
   position:fixed;
-  top:50%;
   left:50%;
-  transform:translate(-50%,-50%) scale(0.6);
+  bottom:80px;
+  transform:translate(-50%, -300px) scale(0.7);
   width:260px;
   height:160px;
   opacity:0;
   cursor:pointer;
-  transition:0.6s ease;
 }
 
 .envelope.show {
-  opacity:1;
-  transform:translate(-50%,-50%) scale(1);
-  animation: glowPulse 2.5s infinite;
+  animation: dropBounce 1.4s cubic-bezier(0.22,1,0.36,1) forwards,
+             glowPulse 2.5s infinite 1.4s;
+}
+
+@keyframes dropBounce {
+  0% {
+    opacity:0;
+    transform:translate(-50%, -300px) scale(0.7);
+  }
+  60% {
+    opacity:1;
+    transform:translate(-50%, 10px) scale(1.05);
+  }
+  80% {
+    transform:translate(-50%, -5px) scale(0.98);
+  }
+  100% {
+    transform:translate(-50%, 0) scale(1);
+  }
 }
 
 @keyframes glowPulse {
@@ -177,10 +158,6 @@ p {
   <p id="text"></p>
 </div>
 
-<div class="card">
-  <p>💌 a small gift for you</p>
-</div>
-
 <div id="envelope" class="envelope">
   <div class="flap"></div>
   <div class="body-env">
@@ -188,7 +165,9 @@ p {
   </div>
 </div>
 
+<!-- 🔊 SOUND -->
 <audio id="sound" src="sound.mp3"></audio>
+<audio id="bgMusic" src="music.mp3" loop></audio>
 
 <script>
 const message = `Selamat Hari Raya ✨
@@ -215,17 +194,14 @@ function typeEffect(){
     textEl.innerHTML += char;
     i++;
 
-    let delay = 60;
-    if(char === "\n") delay = 300;
+    let delay = 90;
+    if(char === "." || char === ",") delay = 180;
+    if(char === "\n") delay = 400;
+    if(i > message.length - 40) delay = 120;
 
     setTimeout(typeEffect, delay);
 
   } else {
-
-    setTimeout(()=>{
-      document.querySelector(".card").classList.add("show");
-    },700);
-
     showEnvelope();
   }
 }
@@ -251,7 +227,7 @@ function showEnvelope(){
   setTimeout(()=>{
     env.classList.add("show");
     setTimeout(typeEnvelopeText,400);
-  },2000);
+  },1500);
 }
 
 document.getElementById("envelope").onclick = () => {
@@ -292,9 +268,19 @@ document.getElementById("envelope").onclick = () => {
   },2600);
 };
 
+/* 🔓 unlock audio */
+document.addEventListener("click", () => {
+  document.getElementById("bgMusic").play().catch(()=>{});
+}, { once: true });
+
 window.onload = () => {
   setTimeout(()=>{
     document.querySelector(".text-center").classList.add("show");
+
+    const music = document.getElementById("bgMusic");
+    music.volume = 0.25;
+    music.play().catch(()=>{});
+
     setTimeout(()=> typeEffect(),800);
   },500);
 };
