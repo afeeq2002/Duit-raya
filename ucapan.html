@@ -53,7 +53,7 @@ p {
   line-height:1.7;
 }
 
-/* ENVELOPE DROP */
+/* ENVELOPE DROP (FIXED) */
 .envelope {
   position:fixed;
   left:50%;
@@ -66,6 +66,7 @@ p {
 }
 
 .envelope.show {
+  opacity:1;
   animation: dropBounce 1.4s cubic-bezier(0.22,1,0.36,1) forwards,
              glowPulse 2.5s infinite 1.4s;
 }
@@ -77,12 +78,13 @@ p {
   }
   60% {
     opacity:1;
-    transform:translate(-50%, 10px) scale(1.05);
+    transform:translate(-50%, 15px) scale(1.05);
   }
   80% {
-    transform:translate(-50%, -5px) scale(0.98);
+    transform:translate(-50%, -6px) scale(0.98);
   }
   100% {
+    opacity:1;
     transform:translate(-50%, 0) scale(1);
   }
 }
@@ -165,7 +167,7 @@ p {
   </div>
 </div>
 
-<!-- 🔊 SOUND -->
+<!-- SOUND -->
 <audio id="sound" src="sound.mp3"></audio>
 <audio id="bgMusic" src="music.mp3" loop></audio>
 
@@ -194,10 +196,11 @@ function typeEffect(){
     textEl.innerHTML += char;
     i++;
 
-    let delay = 90;
-    if(char === "." || char === ",") delay = 180;
-    if(char === "\n") delay = 400;
-    if(i > message.length - 40) delay = 120;
+    let delay = 75 + Math.random()*20;
+
+    if(char === "." || char === ",") delay = 110;
+    if(char === "\n") delay = 180;
+    if(i > message.length - 30) delay = 95;
 
     setTimeout(typeEffect, delay);
 
@@ -268,7 +271,7 @@ document.getElementById("envelope").onclick = () => {
   },2600);
 };
 
-/* 🔓 unlock audio */
+/* unlock music */
 document.addEventListener("click", () => {
   document.getElementById("bgMusic").play().catch(()=>{});
 }, { once: true });
