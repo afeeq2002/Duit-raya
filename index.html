@@ -22,7 +22,6 @@
       overflow:hidden;
     }
 
-    /* container start kosong */
     .container {
       display:flex;
       flex-direction:column;
@@ -31,9 +30,12 @@
       opacity:0;
     }
 
-    /* fade in container */
     .show-container {
       animation: fadeIn 1.5s ease forwards;
+    }
+
+    .fade-in {
+      animation: fadeIn 1.2s ease forwards;
     }
 
     @keyframes fadeIn {
@@ -41,21 +43,17 @@
       to { opacity:1; }
     }
 
-    .hidden {
-      opacity:0;
-    }
-
-    /* 💥 DROP + BOUNCE */
-    @keyframes dropBounce {
+    /* 💥 BOUNCE NAMA */
+    @keyframes bounce {
       0% {
         opacity:0;
-        transform: translateY(-120px);
+        transform: translateY(-100px);
       }
-      70% {
+      60% {
         opacity:1;
-        transform: translateY(10px);
+        transform: translateY(8px);
       }
-      85% {
+      80% {
         transform: translateY(-4px);
       }
       100% {
@@ -63,8 +61,12 @@
       }
     }
 
-    .drop {
-      animation: dropBounce 1.8s ease forwards;
+    .bounce {
+      animation: bounce 1.6s ease forwards;
+    }
+
+    .hidden {
+      opacity:0;
     }
 
     .name-btn {
@@ -131,7 +133,7 @@
 
   <button onclick="startTransition()" id="nameText" class="name-btn hidden"></button>
 
-  <p id="hint" class="hint hidden">(tap perlahan-lahan…)</p>
+  <p id="hint" class="hint hidden">(tap when you're ready…)</p>
 
 </div>
 
@@ -153,38 +155,37 @@ function startTransition(){
   },1200);
 }
 
-/* 🎬 FULL FLOW */
 window.onload = () => {
 
-  // 💤 kosong dulu
+  // 💤 kosong dulu (2.5s)
   setTimeout(()=>{
 
     const main = document.getElementById("main");
     main.classList.add("show-container");
 
-    // 1️⃣ text jatuh
+    // 1️⃣ text fade
     setTimeout(()=>{
       const el = document.getElementById("line1");
       el.classList.remove("hidden");
-      el.classList.add("drop");
-    },500);
+      el.classList.add("fade-in");
+    },600);
 
-    // 2️⃣ nama jatuh + typing
+    // 2️⃣ nama bounce + typing
     setTimeout(()=>{
       const btn = document.getElementById("nameText");
       btn.classList.remove("hidden");
-      btn.classList.add("drop");
+      btn.classList.add("bounce");
       typeEffect();
-    },1800);
+    },2000);
 
-    // 3️⃣ hint
+    // 3️⃣ hint fade
     setTimeout(()=>{
       const hint = document.getElementById("hint");
       hint.classList.remove("hidden");
-      hint.classList.add("drop");
+      hint.classList.add("fade-in");
     },3800);
 
-  },1500); // delay kosong
+  },2500);
 
 };
 
