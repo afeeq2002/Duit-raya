@@ -18,7 +18,6 @@ canvas {
   display:block;
 }
 
-/* ⚡ FLASH EFFECT */
 #flash {
   position:fixed;
   top:0;
@@ -37,16 +36,31 @@ canvas {
 <canvas id="canvas"></canvas>
 <div id="flash"></div>
 
+<!-- 🔊 SOUND SYSTEM -->
+<audio id="fireworkSound" src="boom.mp3" loop></audio>
+<audio id="boomSound" src="bigboom.mp3"></audio>
+<audio id="sparkleSound" src="sparkle.mp3"></audio>
+
 <script>
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const flash = document.getElementById("flash");
+
+const fireworkSound = document.getElementById("fireworkSound");
+const boomSound = document.getElementById("boomSound");
+const sparkleSound = document.getElementById("sparkleSound");
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let particles = [];
 let textParticles = [];
+
+/* 🔓 AUDIO UNLOCK */
+document.addEventListener("click", () => {
+  fireworkSound.volume = 0.1;
+  fireworkSound.play().catch(()=>{});
+}, { once: true });
 
 /* 🎆 FIREWORK */
 function createFirework() {
@@ -89,7 +103,7 @@ function bigExplosion() {
   }
 }
 
-/* ✨ TEXT PARTICLES */
+/* ✨ TEXT */
 function createTextParticles() {
   let off = document.createElement("canvas");
   let offCtx = off.getContext("2d");
@@ -151,7 +165,6 @@ function animate() {
 
   if (mode === "text") {
 
-    // 💫 subtle zoom
     ctx.save();
     ctx.translate(canvas.width/2, canvas.height/2);
     ctx.scale(1.02,1.02);
@@ -177,7 +190,7 @@ function animate() {
   requestAnimationFrame(animate);
 }
 
-/* 🔥 RANDOM FIREWORK */
+/* 🎆 RANDOM FIREWORK */
 function randomFireworks(){
   createFirework();
   setTimeout(randomFireworks, 400 + Math.random()*600);
@@ -186,23 +199,31 @@ function randomFireworks(){
 randomFireworks();
 animate();
 
-/* 💥 TRANSITION: BOOM + FLASH + NADD */
+/* 💥 TRANSITION */
 setTimeout(() => {
 
   // ⚡ FLASH
   flash.style.opacity = "1";
-  setTimeout(()=>{
-    flash.style.opacity = "0";
-  },150);
+  setTimeout(()=>{ flash.style.opacity = "0"; },150);
 
-  // 💥 BOOM
+  // 💥 BIG BOOM SOUND
+  boomSound.currentTime = 0;
+  boomSound.volume = 0.6;
+  boomSound.play().catch(()=>{});
+
+  // 💥 VISUAL
   bigExplosion();
 
-  // 🕰 delay cinematic
   setTimeout(()=>{
     mode = "text";
     particles = [];
     createTextParticles();
+
+    // ✨ SPARKLE
+    sparkleSound.currentTime = 0;
+    sparkleSound.volume = 0.3;
+    sparkleSound.play().catch(()=>{});
+
   },900);
 
 }, 5500);
