@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>✨</title>
 
-<!-- FONT -->
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@600&display=swap" rel="stylesheet">
 
 <style>
@@ -35,34 +34,48 @@ canvas.height = window.innerHeight;
 let particles = [];
 let textParticles = [];
 
-// 🎆 FIREWORKS
+/* 🎆 FIREWORK */
 function createFirework() {
   let x = Math.random() * canvas.width;
-  let y = Math.random() * canvas.height / 2;
+  let y = Math.random() * canvas.height * 0.5;
 
-  let colors = [
-    "#ff4d4d",
-    "#ffd700",
-    "#00ffff",
-    "#ff66ff",
-    "#66ff66",
-    "#ffffff"
-  ];
-
+  let colors = ["#ff4d4d","#ffd700","#00ffff","#ff66ff","#66ff66","#ffffff"];
   let color = colors[Math.floor(Math.random() * colors.length)];
 
-  for (let i = 0; i < 60; i++) {
+  for (let i = 0; i < 80; i++) {
     particles.push({
       x, y,
-      dx: (Math.random() - 0.5) * 6,
-      dy: (Math.random() - 0.5) * 6,
+      dx: (Math.random() - 0.5) * 7,
+      dy: (Math.random() - 0.5) * 7,
       life: 100,
-      color: color
+      color: color,
+      size: Math.random()*2 + 1
     });
   }
 }
 
-// ✨ CREATE TEXT PARTICLES (Nadd)
+/* 💥 BIG EXPLOSION */
+function bigExplosion() {
+  let x = canvas.width / 2;
+  let y = canvas.height / 2;
+
+  let colors = ["#ffd700","#ffffff","#ff66ff","#00ffff"];
+
+  for (let i = 0; i < 220; i++) {
+    let color = colors[Math.floor(Math.random()*colors.length)];
+
+    particles.push({
+      x, y,
+      dx: (Math.random() - 0.5) * 13,
+      dy: (Math.random() - 0.5) * 13,
+      life: 120,
+      color: color,
+      size: Math.random()*3 + 1
+    });
+  }
+}
+
+/* ✨ TEXT PARTICLES */
 function createTextParticles() {
   let off = document.createElement("canvas");
   let offCtx = off.getContext("2d");
@@ -71,7 +84,7 @@ function createTextParticles() {
   off.height = canvas.height;
 
   offCtx.fillStyle = "white";
-  offCtx.font = "italic bold 95px Cormorant"; // 🔥 UPDATED FONT
+  offCtx.font = "italic bold 100px Cormorant";
   offCtx.textAlign = "center";
   offCtx.textBaseline = "middle";
 
@@ -89,24 +102,30 @@ function createTextParticles() {
           y: Math.random()*canvas.height,
           tx: x,
           ty: y,
-          color: `hsl(${Math.random()*360}, 100%, 60%)`
+          color: `hsl(${Math.random()*360}, 100%, 65%)`
         });
       }
     }
   }
 }
 
-// 🎬 ANIMATION
+/* 🎬 ANIMATION */
 let mode = "fireworks";
 
 function animate() {
-  ctx.fillStyle = "rgba(0,0,0,0.2)";
+  ctx.fillStyle = "rgba(0,0,0,0.15)";
   ctx.fillRect(0,0,canvas.width,canvas.height);
 
   if (mode === "fireworks") {
     particles.forEach((p, i) => {
+
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = p.color;
+
       ctx.fillStyle = p.color;
-      ctx.fillRect(p.x, p.y, 2, 2);
+      ctx.fillRect(p.x, p.y, p.size, p.size);
+
+      ctx.shadowBlur = 0;
 
       p.x += p.dx;
       p.y += p.dy;
@@ -118,29 +137,46 @@ function animate() {
 
   if (mode === "text") {
     textParticles.forEach(p => {
+
+      ctx.shadowBlur = 8;
+      ctx.shadowColor = p.color;
+
       ctx.fillStyle = p.color;
       ctx.fillRect(p.x, p.y, 2, 2);
 
-      // 🐢 slow smooth movement
-      p.x += (p.tx - p.x) * 0.02;
-      p.y += (p.ty - p.y) * 0.02;
+      ctx.shadowBlur = 0;
+
+      p.x += (p.tx - p.x) * 0.03;
+      p.y += (p.ty - p.y) * 0.03;
     });
   }
 
   requestAnimationFrame(animate);
 }
 
-setInterval(createFirework, 700);
+/* 🔥 RANDOM FIREWORK */
+function randomFireworks(){
+  createFirework();
+  setTimeout(randomFireworks, 400 + Math.random()*600);
+}
+
+randomFireworks();
 animate();
 
-// 🔄 TRANSFORM TO "Nadd"
+/* 💥 TRANSITION: BOOM → NADD */
 setTimeout(() => {
-  mode = "text";
-  particles = [];
-  createTextParticles();
-}, 7000);
 
-// 👉 CLICK → PAGE 3
+  bigExplosion();
+
+  setTimeout(()=>{
+    mode = "text";
+    particles = [];
+    createTextParticles();
+  },600);
+
+}, 5500);
+
+/* 👉 CLICK NEXT */
 document.addEventListener("click", () => {
   if (mode === "text") {
     window.location.href = "ucapan.html";
