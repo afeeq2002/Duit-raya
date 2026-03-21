@@ -53,14 +53,16 @@ p {
   line-height:1.7;
 }
 
-/* ENVELOPE DROP (FIXED) */
+/* ENVELOPE (SMALL & CLEAN) */
 .envelope {
   position:fixed;
   left:50%;
-  bottom:80px;
-  transform:translate(-50%, -300px) scale(0.7);
-  width:260px;
-  height:160px;
+  bottom:60px;
+
+  transform:translate(-50%, -300px) scale(0.6);
+  width:240px;
+  height:140px;
+
   opacity:0;
   cursor:pointer;
 }
@@ -74,24 +76,24 @@ p {
 @keyframes dropBounce {
   0% {
     opacity:0;
-    transform:translate(-50%, -300px) scale(0.7);
+    transform:translate(-50%, -300px) scale(0.6);
   }
   60% {
     opacity:1;
-    transform:translate(-50%, 15px) scale(1.05);
+    transform:translate(-50%, 10px) scale(0.9);
   }
   80% {
-    transform:translate(-50%, -6px) scale(0.98);
+    transform:translate(-50%, -4px) scale(0.83);
   }
   100% {
     opacity:1;
-    transform:translate(-50%, 0) scale(1);
+    transform:translate(-50%, 0) scale(0.85);
   }
 }
 
 @keyframes glowPulse {
   0% { box-shadow:0 0 15px rgba(255,215,0,0.2); }
-  50% { box-shadow:0 0 30px rgba(255,215,0,0.5); }
+  50% { box-shadow:0 0 25px rgba(255,215,0,0.45); }
   100% { box-shadow:0 0 15px rgba(255,215,0,0.2); }
 }
 
@@ -108,18 +110,32 @@ p {
 
 #envText {
   font-family:'Dancing Script';
-  font-size:22px;
+  font-size:20px;
   color:#facc15;
 }
 
+/* FLAP MATCH BODY */
 .flap {
   position:absolute;
   width:100%;
   height:100%;
+
   background: linear-gradient(135deg,#064e3b,#065f46);
+
+  background-image:
+    linear-gradient(135deg,#064e3b,#065f46),
+    radial-gradient(circle at 50% 0%, rgba(255,255,255,0.25), transparent 60%);
+
   clip-path:polygon(0 0,100% 0,50% 60%);
   transform-origin:top;
   transition:0.9s cubic-bezier(0.22,1,0.36,1);
+
+  border-bottom:2px solid gold;
+
+  box-shadow:
+    0 2px 6px rgba(255,215,0,0.3),
+    inset 0 -8px 15px rgba(0,0,0,0.4),
+    0 5px 10px rgba(0,0,0,0.3);
 }
 
 .envelope.open .flap {
@@ -167,7 +183,6 @@ p {
   </div>
 </div>
 
-<!-- SOUND -->
 <audio id="sound" src="sound.mp3"></audio>
 <audio id="bgMusic" src="music.mp3" loop></audio>
 
@@ -197,7 +212,6 @@ function typeEffect(){
     i++;
 
     let delay = 75 + Math.random()*20;
-
     if(char === "." || char === ",") delay = 110;
     if(char === "\n") delay = 180;
     if(i > message.length - 30) delay = 95;
@@ -229,8 +243,8 @@ function showEnvelope(){
 
   setTimeout(()=>{
     env.classList.add("show");
-    setTimeout(typeEnvelopeText,400);
-  },1500);
+    setTimeout(typeEnvelopeText,500);
+  },2200);
 }
 
 document.getElementById("envelope").onclick = () => {
@@ -271,7 +285,6 @@ document.getElementById("envelope").onclick = () => {
   },2600);
 };
 
-/* unlock music */
 document.addEventListener("click", () => {
   document.getElementById("bgMusic").play().catch(()=>{});
 }, { once: true });
