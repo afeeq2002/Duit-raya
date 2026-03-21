@@ -44,7 +44,6 @@
       animation: fadeIn 1.2s ease forwards;
     }
 
-    /* 💥 bounce */
     @keyframes bounce {
       0% { opacity:0; transform: translateY(-100px); }
       60% { opacity:1; transform: translateY(8px); }
@@ -88,7 +87,6 @@
       font-size:14px;
     }
 
-    /* 💥 HINT (CONTROL BY JS ONLY) */
     #hint {
       opacity:0;
       font-size:12px;
@@ -115,14 +113,24 @@
 
 </div>
 
+<!-- ORIGINAL SOUND -->
 <audio id="clickSound" src="sound.mp3"></audio>
+
+<!-- 💥 NEW CLICK SOUND -->
+<audio id="tapSound" src="click.mp3"></audio>
 
 <script>
 
 function startTransition(){
   const main = document.getElementById("main");
-  let sound = document.getElementById("clickSound");
 
+  // 💥 ADD CLICK SOUND (SAFE)
+  let tap = document.getElementById("tapSound");
+  tap.currentTime = 0;
+  tap.volume = 0.6;
+  tap.play();
+
+  let sound = document.getElementById("clickSound");
   sound.volume = 0.4;
   sound.play();
 
@@ -140,14 +148,12 @@ window.onload = () => {
     const main = document.getElementById("main");
     main.classList.add("show-container");
 
-    // text
     setTimeout(()=>{
       const el = document.getElementById("line1");
       el.classList.remove("hidden");
       el.classList.add("fade-in");
     },600);
 
-    // nama
     setTimeout(()=>{
       const btn = document.getElementById("nameText");
       btn.classList.remove("hidden");
@@ -173,7 +179,6 @@ function typeEffect(){
     setTimeout(typeEffect, delay);
 
   } else {
-    // 💥 DIRECT CONTROL (NO CSS BUG)
     setTimeout(()=>{
       document.getElementById("hint").style.opacity = "0.5";
     },700);
