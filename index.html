@@ -26,26 +26,26 @@
       display:flex;
       flex-direction:column;
       align-items:center;
-      gap:15px;
+      gap:18px;
     }
 
-    /* hidden */
+    /* hidden state */
     .hidden {
       opacity:0;
     }
 
-    /* 💥 DROP + BOUNCE */
+    /* 💥 DROP + BOUNCE (SMOOTH VERSION) */
     @keyframes dropBounce {
       0% {
         opacity:0;
-        transform: translateY(-150px);
+        transform: translateY(-100px);
       }
-      60% {
+      70% {
         opacity:1;
-        transform: translateY(12px);
+        transform: translateY(8px);
       }
-      80% {
-        transform: translateY(-6px);
+      85% {
+        transform: translateY(-3px);
       }
       100% {
         transform: translateY(0);
@@ -53,7 +53,7 @@
     }
 
     .drop {
-      animation: dropBounce 1.5s ease forwards;
+      animation: dropBounce 1.6s ease forwards;
     }
 
     .name-btn {
@@ -142,28 +142,32 @@ function startTransition(){
   },1200);
 }
 
-/* 🔥 NEW FLOW (DROP + BOUNCE) */
+/* 🎬 SMOOTH FLOW */
 window.onload = () => {
 
-  // 1️⃣ text jatuh
+  // 1️⃣ text (slow masuk)
   setTimeout(()=>{
+    document.getElementById("line1").classList.remove("hidden");
     document.getElementById("line1").classList.add("drop");
   },800);
 
-  // 2️⃣ nama jatuh + typing
+  // 2️⃣ nama (slow + typing)
   setTimeout(()=>{
-    document.getElementById("nameText").classList.add("drop");
+    const btn = document.getElementById("nameText");
+    btn.classList.remove("hidden");
+    btn.classList.add("drop");
     typeEffect();
-  },2000);
+  },2200);
 
-  // 3️⃣ hint jatuh
+  // 3️⃣ hint (last)
   setTimeout(()=>{
+    document.getElementById("hint").classList.remove("hidden");
     document.getElementById("hint").classList.add("drop");
-  },3800);
+  },4200);
 
 };
 
-/* typing */
+/* typing (slow & smooth) */
 const text="Nur Fatin Nadhirah";
 let i=0;
 
@@ -172,8 +176,11 @@ function typeEffect(){
     document.getElementById("nameText").innerHTML += text.charAt(i);
     i++;
 
-    let delay = 100;
-    if(i > text.length - 3) delay = 140;
+    let delay = 110;
+
+    if(i > text.length - 3){
+      delay = 150;
+    }
 
     setTimeout(typeEffect, delay);
   }
