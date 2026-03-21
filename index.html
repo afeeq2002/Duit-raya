@@ -44,7 +44,7 @@
       animation: fadeIn 1.2s ease forwards;
     }
 
-    /* 💥 bounce nama */
+    /* 💥 bounce */
     @keyframes bounce {
       0% { opacity:0; transform: translateY(-100px); }
       60% { opacity:1; transform: translateY(8px); }
@@ -62,28 +62,15 @@
 
     .name-btn {
       font-family: 'Playfair Display', serif;
-      letter-spacing: 1px;
       font-size: 24px;
-
       padding: 16px 32px;
       border-radius: 40px;
-
       background: rgba(255,255,255,0.15);
       backdrop-filter: blur(12px);
-
       color: white;
       border: 1px solid rgba(255,255,255,0.3);
-
       cursor: pointer;
-      transition: all 0.3s ease;
       min-width: 280px;
-
-      box-shadow: 0 0 20px rgba(255,255,255,0.1);
-    }
-
-    .name-btn:hover {
-      background: rgba(255,255,255,0.25);
-      transform: scale(1.05);
     }
 
     .name-btn::after {
@@ -101,14 +88,11 @@
       font-size:14px;
     }
 
-    /* 💥 HINT FINAL (animation only) */
+    /* 💥 HINT (CONTROL BY JS ONLY) */
     #hint {
       opacity:0;
       font-size:12px;
-    }
-
-    .show-hint {
-      animation: fadeIn 1.2s ease forwards;
+      transition: opacity 1s ease;
     }
 
     .fade-out {
@@ -151,7 +135,6 @@ function startTransition(){
 
 window.onload = () => {
 
-  // 💤 kosong dulu
   setTimeout(()=>{
 
     const main = document.getElementById("main");
@@ -176,7 +159,6 @@ window.onload = () => {
 
 };
 
-/* typing */
 const text="Nur Fatin Nadhirah";
 let i=0;
 
@@ -191,9 +173,9 @@ function typeEffect(){
     setTimeout(typeEffect, delay);
 
   } else {
-    // 💥 ONLY here hint keluar
+    // 💥 DIRECT CONTROL (NO CSS BUG)
     setTimeout(()=>{
-      document.getElementById("hint").classList.add("show-hint");
+      document.getElementById("hint").style.opacity = "0.5";
     },700);
   }
 }
