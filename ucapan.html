@@ -42,46 +42,46 @@ p {
   line-height:1.7;
 }
 
-/* ENVELOPE (CENTER) */
+/* ENVELOPE CENTER */
 .envelope {
   position:fixed;
   top:50%;
   left:50%;
   transform:translate(-50%,-50%) scale(0.6);
-
-  width:240px;
-  height:150px;
-
+  width:260px;
+  height:160px;
   opacity:0;
   cursor:pointer;
   transition:0.6s ease;
 }
 
-/* POP ANIMATION */
 .envelope.show {
   opacity:1;
   transform:translate(-50%,-50%) scale(1);
+  box-shadow:0 10px 40px rgba(0,0,0,0.6),
+             0 0 25px rgba(255,215,0,0.25);
 }
 
-/* BODY */
+/* BODY DESIGN UPGRADE */
 .body-env {
   width:100%;
   height:100%;
-  background:linear-gradient(135deg,#ffffff,#f3f3f3);
+  background: linear-gradient(135deg,#064e3b,#065f46);
+  border:2px solid gold;
   border-radius:12px;
   position:relative;
   z-index:1;
   display:flex;
   justify-content:center;
   align-items:center;
-  font-family:'Dancing Script';
-  font-size:22px;
-  color:#14532d;
 }
 
-/* TEXT ON ENVELOPE */
-.body-env::after {
-  content:"Selamat Hari Raya ✨";
+/* TEXT TYPE */
+#envText {
+  font-family:'Dancing Script';
+  font-size:22px;
+  color:#facc15;
+  letter-spacing:1px;
 }
 
 /* FLAP */
@@ -96,29 +96,28 @@ p {
   z-index:2;
 }
 
-/* OPEN */
 .envelope.open .flap {
   transform:rotateX(180deg);
 }
 
-/* 💸 MONEY FLY */
+/* 💸 STORM MONEY */
 .money-fly {
   position:fixed;
   pointer-events:none;
-  animation: fly 2s ease-out forwards;
+  animation: burst 1.8s ease-out forwards;
 }
 
-@keyframes fly {
+@keyframes burst {
   0% {
-    transform: translateY(0) scale(0.5);
-    opacity: 0;
+    transform: translate(0,0) scale(0.5);
+    opacity:0;
   }
   30% {
-    opacity: 1;
+    opacity:1;
   }
   100% {
-    transform: translateY(-500px) scale(1.3) rotate(25deg);
-    opacity: 0;
+    transform: translate(var(--x), var(--y)) scale(1.2) rotate(360deg);
+    opacity:0;
   }
 }
 </style>
@@ -133,7 +132,9 @@ p {
 
 <div id="envelope" class="envelope">
   <div class="flap"></div>
-  <div class="body-env"></div>
+  <div class="body-env">
+    <div id="envText"></div>
+  </div>
 </div>
 
 <audio id="sound" src="sound.mp3"></audio>
@@ -174,12 +175,30 @@ function typeEffect(){
   }
 }
 
+/* ENVELOPE TEXT TYPE */
+function typeEnvelopeText(){
+  const text = "Selamat Hari Raya ✨";
+  const el = document.getElementById("envText");
+  let i = 0;
+
+  function type(){
+    if(i < text.length){
+      el.innerHTML += text.charAt(i);
+      i++;
+      setTimeout(type, 80);
+    }
+  }
+
+  type();
+}
+
 /* DELAY + POP */
 function showEnvelope(){
   const env = document.getElementById("envelope");
 
   setTimeout(()=>{
     env.classList.add("show");
+    setTimeout(typeEnvelopeText,400);
   },2000);
 }
 
@@ -189,14 +208,21 @@ document.getElementById("envelope").onclick = () => {
   env.classList.add("open");
   document.getElementById("sound").play();
 
-  /* 💸 DUIT KELUAR DARI ENVELOPE (BANYAK) */
-  for(let i=0;i<60;i++){
+  /* 💸 STORM EFFECT FULL SCREEN */
+  for(let i=0;i<90;i++){
     let d = document.createElement("div");
     d.className = "money-fly";
-    d.innerHTML = "💵";
+    d.innerHTML = Math.random() > 0.5 ? "💵" : "💸";
 
-    d.style.left = (window.innerWidth/2 + (Math.random()*200 -100)) + "px";
-    d.style.top = (window.innerHeight/2 + (Math.random()*100)) + "px";
+    d.style.left = (window.innerWidth/2) + "px";
+    d.style.top = (window.innerHeight/2) + "px";
+
+    let x = (Math.random() - 0.5) * 1000;
+    let y = (Math.random() - 0.5) * 1000;
+
+    d.style.setProperty('--x', x + "px");
+    d.style.setProperty('--y', y + "px");
+
     d.style.fontSize = (20 + Math.random()*25) + "px";
 
     document.body.appendChild(d);
