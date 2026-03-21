@@ -3,7 +3,6 @@
 <head>
   <title>Untuk Awak</title>
 
-  <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
 
   <style>
@@ -24,40 +23,51 @@
     }
 
     .container {
-      transition: opacity 1s ease;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:15px;
     }
 
-    .fade-out {
-      opacity: 0;
+    /* hidden state */
+    .hidden {
+      opacity:0;
+      transform: translateY(-30px);
     }
 
-    /* Button style (glass effect) */
+    .show {
+      opacity:1;
+      transform: translateY(0);
+      transition: all 1s ease;
+    }
+
     .name-btn {
       font-family: 'Playfair Display', serif;
       letter-spacing: 1px;
-      font-size: 22px;
+      font-size: 24px;
 
-      padding: 14px 28px;
-      border-radius: 30px;
+      padding: 16px 32px;
+      border-radius: 40px;
 
       background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
 
       color: white;
       border: 1px solid rgba(255,255,255,0.3);
 
       cursor: pointer;
       transition: all 0.3s ease;
-      min-width: 260px;
+      min-width: 280px;
+
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
     }
 
     .name-btn:hover {
       background: rgba(255,255,255,0.25);
       transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(255,255,255,0.25);
     }
 
-    /* Cursor blinking */
     .name-btn::after {
       content: "|";
       margin-left: 5px;
@@ -67,56 +77,95 @@
     @keyframes blink {
       50% { opacity: 0; }
     }
+
+    .subtitle {
+      opacity:0.7;
+      font-size:14px;
+      letter-spacing:1px;
+    }
+
+    .hint {
+      opacity:0.5;
+      font-size:12px;
+    }
+
+    .fade-out {
+      opacity:0;
+      transition:1s;
+    }
+
   </style>
 </head>
 
 <body>
 
-  <div class="container" id="main">
+<div class="container" id="main">
 
-    <p style="opacity:0.7;">a small thing for you 🌙</p>
+  <p id="line1" class="subtitle hidden">a small thing for you 🌙</p>
 
-    <!-- BUTTON -->
-    <button onclick="startTransition()" class="name-btn" id="nameText"></button>
+  <button onclick="startTransition()" id="nameText" class="name-btn hidden"></button>
 
-    <p style="opacity:0.5;">(tap untuk buka)</p>
+  <p id="hint" class="hint hidden">(tap perlahan-lahan…)</p>
 
-  </div>
+</div>
 
-  <!-- SOUND -->
-  <audio id="clickSound" src="sound.mp3" preload="auto"></audio>
+<audio id="clickSound" src="sound.mp3" preload="auto"></audio>
 
-  <script>
-    function startTransition() {
-      const main = document.getElementById("main");
-      let sound = document.getElementById("clickSound");
+<script>
 
-      sound.volume = 0.4;
-      sound.play();
+function startTransition(){
+  const main = document.getElementById("main");
+  let sound = document.getElementById("clickSound");
 
-      setTimeout(() => {
-        main.classList.add("fade-out");
-      }, 150);
+  sound.volume = 0.4;
+  sound.play();
 
-      setTimeout(() => {
-        window.location.href = "./fireworks.html";
-      }, 1100);
-    }
+  main.classList.add("fade-out");
 
-    // Typing effect
-    const text = "Nur Fatin Nadhirah";
-    let i = 0;
+  setTimeout(()=>{
+    window.location.href="./fireworks.html";
+  },1200);
+}
 
-    function typeEffect() {
-      if (i < text.length) {
-        document.getElementById("nameText").innerHTML += text.charAt(i);
-        i++;
-        setTimeout(typeEffect, 80);
-      }
-    }
+/* STEP ANIMATION FLOW */
 
-    window.onload = typeEffect;
-  </script>
+window.onload = () => {
+
+  // 1️⃣ text jatuh
+  setTimeout(()=>{
+    document.getElementById("line1").classList.add("show");
+  },500);
+
+  // 2️⃣ nama muncul + typing
+  setTimeout(()=>{
+    document.getElementById("nameText").classList.add("show");
+    typeEffect();
+  },1500);
+
+  // 3️⃣ hint muncul
+  setTimeout(()=>{
+    document.getElementById("hint").classList.add("show");
+  },3000);
+
+};
+
+/* typing */
+const text="Nur Fatin Nadhirah";
+let i=0;
+
+function typeEffect(){
+  if(i < text.length){
+    document.getElementById("nameText").innerHTML += text.charAt(i);
+    i++;
+
+    let delay = 100;
+    if(i > text.length - 3) delay = 140;
+
+    setTimeout(typeEffect, delay);
+  }
+}
+
+</script>
 
 </body>
 </html>
