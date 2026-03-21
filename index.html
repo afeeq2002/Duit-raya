@@ -178,18 +178,11 @@ window.onload = () => {
       typeEffect();
     },2000);
 
-    // 3️⃣ hint fade
-    setTimeout(()=>{
-      const hint = document.getElementById("hint");
-      hint.classList.remove("hidden");
-      hint.classList.add("fade-in");
-    },3800);
-
   },2500);
 
 };
 
-/* ✍️ typing slow */
+/* ✍️ typing slow + trigger hint */
 const text="Nur Fatin Nadhirah";
 let i=0;
 
@@ -205,6 +198,14 @@ function typeEffect(){
     }
 
     setTimeout(typeEffect, delay);
+
+  } else {
+    // 💥 bila typing siap → hint keluar
+    setTimeout(()=>{
+      const hint = document.getElementById("hint");
+      hint.classList.remove("hidden");
+      hint.classList.add("fade-in");
+    },500); // delay sikit bagi feel
   }
 }
 
