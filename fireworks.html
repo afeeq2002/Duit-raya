@@ -17,16 +17,30 @@ body {
 canvas {
   display:block;
 }
+
+/* ⚡ FLASH EFFECT */
+#flash {
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:white;
+  opacity:0;
+  pointer-events:none;
+}
 </style>
 </head>
 
 <body>
 
 <canvas id="canvas"></canvas>
+<div id="flash"></div>
 
 <script>
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
+const flash = document.getElementById("flash");
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -136,6 +150,13 @@ function animate() {
   }
 
   if (mode === "text") {
+
+    // 💫 subtle zoom
+    ctx.save();
+    ctx.translate(canvas.width/2, canvas.height/2);
+    ctx.scale(1.02,1.02);
+    ctx.translate(-canvas.width/2, -canvas.height/2);
+
     textParticles.forEach(p => {
 
       ctx.shadowBlur = 8;
@@ -149,6 +170,8 @@ function animate() {
       p.x += (p.tx - p.x) * 0.03;
       p.y += (p.ty - p.y) * 0.03;
     });
+
+    ctx.restore();
   }
 
   requestAnimationFrame(animate);
@@ -163,16 +186,24 @@ function randomFireworks(){
 randomFireworks();
 animate();
 
-/* 💥 TRANSITION: BOOM → NADD */
+/* 💥 TRANSITION: BOOM + FLASH + NADD */
 setTimeout(() => {
 
+  // ⚡ FLASH
+  flash.style.opacity = "1";
+  setTimeout(()=>{
+    flash.style.opacity = "0";
+  },150);
+
+  // 💥 BOOM
   bigExplosion();
 
+  // 🕰 delay cinematic
   setTimeout(()=>{
     mode = "text";
     particles = [];
     createTextParticles();
-  },600);
+  },900);
 
 }, 5500);
 
