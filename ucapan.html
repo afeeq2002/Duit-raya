@@ -42,34 +42,46 @@ p {
   line-height:1.7;
 }
 
-/* ENVELOPE */
+/* ENVELOPE (CENTER) */
 .envelope {
   position:fixed;
-  bottom:80px;
+  top:50%;
   left:50%;
-  transform:translateX(-50%) scale(0.8);
+  transform:translate(-50%,-50%) scale(0.6);
 
-  width:180px;
-  height:120px;
+  width:240px;
+  height:150px;
 
   opacity:0;
   cursor:pointer;
-  transition:0.5s ease;
+  transition:0.6s ease;
 }
 
+/* POP ANIMATION */
 .envelope.show {
   opacity:1;
-  transform:translateX(-50%) scale(1);
+  transform:translate(-50%,-50%) scale(1);
 }
 
 /* BODY */
 .body-env {
   width:100%;
   height:100%;
-  background:#fff;
-  border-radius:10px;
+  background:linear-gradient(135deg,#ffffff,#f3f3f3);
+  border-radius:12px;
   position:relative;
   z-index:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:'Dancing Script';
+  font-size:22px;
+  color:#14532d;
+}
+
+/* TEXT ON ENVELOPE */
+.body-env::after {
+  content:"Selamat Hari Raya ✨";
 }
 
 /* FLAP */
@@ -89,40 +101,23 @@ p {
   transform:rotateX(180deg);
 }
 
-/* duit preview */
-.money {
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,20px);
-  opacity:0;
-  font-size:16px;
-  color:#14532d;
-  font-weight:bold;
-  transition:0.5s;
-  z-index:0;
-}
-
-.envelope.open .money {
-  transform:translate(-50%,-40px);
-  opacity:1;
-}
-
-/* 💸 DUIT TERBANG */
+/* 💸 MONEY FLY */
 .money-fly {
   position:fixed;
-  font-size:28px;
   pointer-events:none;
-  animation: fly 1.5s ease-out forwards;
+  animation: fly 2s ease-out forwards;
 }
 
 @keyframes fly {
   0% {
-    transform: translateY(0) scale(1);
+    transform: translateY(0) scale(0.5);
+    opacity: 0;
+  }
+  30% {
     opacity: 1;
   }
   100% {
-    transform: translateY(-200px) scale(1.5) rotate(20deg);
+    transform: translateY(-500px) scale(1.3) rotate(25deg);
     opacity: 0;
   }
 }
@@ -139,7 +134,6 @@ p {
 <div id="envelope" class="envelope">
   <div class="flap"></div>
   <div class="body-env"></div>
-  <div class="money">💵 Untuk Nadd</div>
 </div>
 
 <audio id="sound" src="sound.mp3"></audio>
@@ -180,12 +174,13 @@ function typeEffect(){
   }
 }
 
+/* DELAY + POP */
 function showEnvelope(){
   const env = document.getElementById("envelope");
 
   setTimeout(()=>{
     env.classList.add("show");
-  },1500); // delay sikit bagi feel
+  },2000);
 }
 
 document.getElementById("envelope").onclick = () => {
@@ -194,21 +189,24 @@ document.getElementById("envelope").onclick = () => {
   env.classList.add("open");
   document.getElementById("sound").play();
 
-  // 💸 DUIT TERBANG FULL SCREEN
-  for(let i=0;i<25;i++){
+  /* 💸 DUIT KELUAR DARI ENVELOPE (BANYAK) */
+  for(let i=0;i<60;i++){
     let d = document.createElement("div");
     d.className = "money-fly";
     d.innerHTML = "💵";
-    d.style.left = Math.random()*100 + "vw";
-    d.style.top = Math.random()*100 + "vh";
+
+    d.style.left = (window.innerWidth/2 + (Math.random()*200 -100)) + "px";
+    d.style.top = (window.innerHeight/2 + (Math.random()*100)) + "px";
+    d.style.fontSize = (20 + Math.random()*25) + "px";
+
     document.body.appendChild(d);
 
-    setTimeout(()=>d.remove(),1500);
+    setTimeout(()=>d.remove(),2000);
   }
 
   setTimeout(()=>{
     window.location.href = "duit.html";
-  },1800);
+  },2200);
 };
 
 setTimeout(typeEffect,1000);
