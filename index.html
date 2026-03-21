@@ -36,6 +36,7 @@
 
     .fade-in {
       animation: fadeIn 1.2s ease forwards;
+      visibility:visible;
     }
 
     @keyframes fadeIn {
@@ -65,8 +66,10 @@
       animation: bounce 1.6s ease forwards;
     }
 
+    /* 🔥 FIX HIDDEN */
     .hidden {
       opacity:0;
+      visibility:hidden;
     }
 
     .name-btn {
@@ -133,7 +136,9 @@
 
   <button onclick="startTransition()" id="nameText" class="name-btn hidden"></button>
 
-  <p id="hint" class="hint hidden">(tap when you're ready…)</p>
+  <p id="hint" class="hint hidden" style="visibility:hidden;">
+    (tap when you're ready…)
+  </p>
 
 </div>
 
@@ -157,20 +162,20 @@ function startTransition(){
 
 window.onload = () => {
 
-  // 💤 kosong dulu (2.5s)
+  // 💤 kosong dulu
   setTimeout(()=>{
 
     const main = document.getElementById("main");
     main.classList.add("show-container");
 
-    // 1️⃣ text fade
+    // text fade
     setTimeout(()=>{
       const el = document.getElementById("line1");
       el.classList.remove("hidden");
       el.classList.add("fade-in");
     },600);
 
-    // 2️⃣ nama bounce + typing
+    // nama bounce + typing
     setTimeout(()=>{
       const btn = document.getElementById("nameText");
       btn.classList.remove("hidden");
@@ -182,7 +187,7 @@ window.onload = () => {
 
 };
 
-/* ✍️ typing slow + trigger hint */
+/* typing + trigger hint */
 const text="Nur Fatin Nadhirah";
 let i=0;
 
@@ -200,12 +205,12 @@ function typeEffect(){
     setTimeout(typeEffect, delay);
 
   } else {
-    // 💥 bila typing siap → hint keluar
+    // 💥 hint keluar AFTER typing
     setTimeout(()=>{
       const hint = document.getElementById("hint");
       hint.classList.remove("hidden");
       hint.classList.add("fade-in");
-    },500); // delay sikit bagi feel
+    },700); // delay sikit bagi feel cinematic
   }
 }
 
